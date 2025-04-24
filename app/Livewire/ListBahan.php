@@ -16,7 +16,6 @@ class ListBahan extends Component
     }
     public function render()
     {
-        $bahans = $this->fetchData();
         return view('livewire.list-bahan', compact('bahans'));
     }
 }

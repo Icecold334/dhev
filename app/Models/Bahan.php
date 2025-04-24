@@ -10,7 +10,7 @@ class Bahan extends Model
     /** @use HasFactory<\Database\Factories\BahanFactory> */
     use HasFactory;
 
-    protected $table = 'bahan';
+    protected $table = 'bahans';
     protected $guarded = ['id'];
 
     // Relasi ke satuan besar
