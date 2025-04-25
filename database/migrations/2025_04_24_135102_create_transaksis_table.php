@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('kode');
             $table->foreignId('bahan_id')->constrained('bahans')->onDelete('cascade');
             $table->string('jumlah');
+            $table->integer('harga');
             $table->string('keterangan')->nullable();
             $table->timestamps();
         });

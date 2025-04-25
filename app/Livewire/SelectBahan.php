@@ -16,7 +16,6 @@ class SelectBahan extends Component
     public function selectBahan($bahan)
     {
         $this->dispatch('bahan_id', id: $bahan);
-        $this->dispatch('totalDisplay', total: 650000);
     }
     public function render()
     {
