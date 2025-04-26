@@ -24,6 +24,7 @@ class TransaksiFactory extends Factory
             'kode' => $kode,
             'bahan_id' => Bahan::inRandomOrder()->first()->id,
             'jumlah' => fake()->numberBetween(50, 200),
+            'harga' => fake()->numberBetween(10, 70) * 1000,
             'keterangan' => fake()->boolean ? fake()->sentence : ''
         ];
     }
