@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Bahan;
+use App\Models\Pembelian;
 use App\Models\Transaksi;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -69,7 +70,7 @@ class ListBeli extends Component
                 'updated_at' => now(),
             ];
         }
-        Transaksi::insert($data);
+        Pembelian::insert($data);
         $this->reset();
         $this->totalSum();
     }

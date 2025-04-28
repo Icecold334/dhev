@@ -1,0 +1,1 @@
+<x-layouts.app :title="__('Penjualan')"></x-layouts.app>

@@ -17,10 +17,13 @@
             <flux:navlist.group :heading="__('Platform')" class="grid">
                 <flux:navlist.item icon="chart-pie" :href="route('dashboard')"
                     :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+                <flux:navlist.item icon="clipboard-document-list" :href="route('menu.index')"
+                    :current="request()->routeIs('menu.index')" wire:navigate>{{ __('Menu') }}</flux:navlist.item>
                 <flux:navlist.item icon="archive-box" :href="route('bahan.index')"
-                    :current="request()->routeIs('bahan.index')" wire:navigate>{{ __('Bahan') }}</flux:navlist.item>
-                <flux:navlist.item icon="shopping-cart" :href="route('beli.index')"
-                    :current="request()->routeIs('beli.index')" wire:navigate>{{ __('Penjualan') }}</flux:navlist.item>
+                    :current="request()->routeIs('bahan.index')" wire:navigate>{{ __('Stok Bahan') }}
+                </flux:navlist.item>
+                <flux:navlist.item icon="shopping-cart" :href="route('jual.index')"
+                    :current="request()->routeIs('jual.index')" wire:navigate>{{ __('Penjualan') }}</flux:navlist.item>
                 <flux:navlist.item icon="inbox-arrow-down" :href="route('beli.index')"
                     :current="request()->routeIs('beli.index')" wire:navigate>{{ __('Pembelian') }}</flux:navlist.item>
             </flux:navlist.group>

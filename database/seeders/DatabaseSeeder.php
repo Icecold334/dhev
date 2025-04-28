@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\ListMenu;
+use App\Models\LogStok;
+use App\Models\Menu;
 use App\Models\Transaksi;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -18,8 +21,12 @@ class DatabaseSeeder extends Seeder
             SatuanSeeder::class,
             BahanSeeder::class
         ]);
-
-        Transaksi::factory(100)->create();
+        Menu::factory(10)->create();
+        foreach (Menu::all() as $key => $value) {
+            ListMenu::factory(fake()->numberBetween(3, 7))->fillMenu($value)->create();
+        }
+        Transaksi::factory(10)->create();
+        LogStok::factory(10)->create();
 
         User::factory()->create([
             'name' => 'User',

@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('transaksis', function (Blueprint $table) {
+        Schema::create('log_stoks', function (Blueprint $table) {
             $table->id();
+            $table->string('jenis')->nullable();
             $table->string('kode');
-            $table->foreignId('menu_id')->constrained('menus')->onDelete('cascade');
+            $table->foreignId('transaksi_id')->nullable()->constrained('transaksis')->onDelete('cascade');
+            $table->foreignId('bahan_id')->constrained('bahans')->onDelete('cascade');
             $table->string('jumlah');
-            $table->integer('harga'); // harga saat terjual, antisipasi harga berubah di masa depan
+            $table->integer('harga')->nullable();
             $table->string('keterangan')->nullable();
             $table->timestamps();
         });
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('transaksis');
+        Schema::dropIfExists('log_stoks');
     }
 };

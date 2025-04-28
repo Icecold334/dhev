@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Bahan;
+use App\Models\Menu;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,14 +18,13 @@ class TransaksiFactory extends Factory
      */
     public function definition(): array
     {
-        $jenis = fake()->boolean;
-        $kode = ($jenis ? 'IN' : 'KC') . fake()->numerify('-###-###-###');
+        $kode = 'N' . fake()->numerify('-###-###-###');
+        $menu = Menu::inRandomOrder()->first();
         return [
-            'jenis' => $jenis,
             'kode' => $kode,
-            'bahan_id' => Bahan::inRandomOrder()->first()->id,
-            'jumlah' => fake()->numberBetween(50, 200),
-            'harga' => fake()->numberBetween(10, 70) * 1000,
+            'menu_id' => $menu->id,
+            'jumlah' => fake()->numberBetween(1, 10),
+            'harga' => $menu->harga,
             'keterangan' => fake()->boolean ? fake()->sentence : ''
         ];
     }
