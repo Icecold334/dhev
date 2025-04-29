@@ -1,34 +1,44 @@
-<div>
-    <table id="menuTable" class="display w-full text-sm text-left text-gray-500">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-            <tr>
-                <th scope="col" class="px-6 py-3">Gambar</th>
-                <th scope="col" class="px-6 py-3">Nama</th>
-                <th scope="col" class="px-6 py-3">Harga</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($menus as $menu)
-            <tr>
-                <td class="px-6 py-4">
-                    <img src="{{ $menu['image'] }}" alt="{{ $menu['name'] }}" class="w-16 h-16 object-cover rounded">
-                </td>
-                <td class="px-6 py-4 font-medium text-gray-900">{{ $menu['name'] }}</td>
-                <td class="px-6 py-4">Rp {{ number_format($menu['price'], 0, ',', '.') }}</td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
+<table id="search-table">
+    <thead>
+        <tr>
+            <th class="w-1/3">
+                <span class="flex items-center">#</span>
+            </th>
+            <th class="w-1/3">
+                <span class="flex items-center">Nama</span>
+            </th>
+            <th class="w-1/5">
+                <span class="flex items-center">Harga</span>
+            </th>
+            {{-- <th class="w-1/6">
+                <span class="flex items-center">Deskripsi</span>
+            </th> --}}
+            <th class="w-1/12">
+                <span class="flex items-center"></span>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($menus as $menu)
+        <tr>
+            <td>{{ $loop->iteration }}</td>
+            <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $menu->nama }}</td>
+            <td>Rp {{ number_format($menu->harga, 0, ',', '.') }}</td>
+            <td>
+                <flux:button icon="eye" href='/menu/{{ $menu->id }}'></flux:button>
+            </td>
+        </tr>
+        @endforeach
+    </tbody>
+</table>
 @pushOnce('scripts')
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-
-<script>
-    // document.addEventListener('livewire:load', function () {
-                    $('#menuTable').DataTable();
-                // });
+<script type="module">
+    if (document.getElementById("search-table")) {
+        
+        const dataTable = new DataTable("#search-table", {
+        searchable: true,
+        sortable: false
+        });
+        }
 </script>
-
 @endPushOnce
