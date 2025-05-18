@@ -1,22 +1,12 @@
-<div wire:ignore>
-    <select id="bahan" name="state" style="width: 100%">
-        <option value=""></option>
-        @foreach ($bahans as $item)
-        <option value="{{ $item->id }}">{{ $item->nama }}</option>
+<div class="flex gap-6">
+    <flux:select wire:model.live="bahan_id">
+        <flux:select.option value="">Pilih Bahan</flux:select.option>
+        @foreach ($availableBahans as $item)
+        <flux:select.option value="{{ $item->id }}">{{ $item->nama }}</flux:select.option>
         @endforeach
-    </select>
+    </flux:select>
+
+    @if ($selectedBahan)
+    <flux:button wire:click="confirmSelect" icon="plus">Pilih Bahan</flux:button>
+    @endif
 </div>
-@pushOnce('scripts')
-<script>
-    $( "#bahan" ).select2({
-        theme: "dark-adminlte",
-        width: 'resolve',
-        placeholder: "Pilih Bahan",
-        });
-    $('#bahan').on('change', function (e) {
-    const data = $('#bahan').select2("val");
-    @this.call('selectBahan',data)
-    // $('#bahan').val(null).trigger('change');
-    });
-</script>
-@endPushOnce

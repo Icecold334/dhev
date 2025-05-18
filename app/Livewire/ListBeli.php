@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Bahan;
+use App\Models\LogStok;
 use App\Models\Pembelian;
 use App\Models\Transaksi;
 use Livewire\Attributes\On;
@@ -20,9 +21,33 @@ class ListBeli extends Component
         $this->newBahan = $bahan;
     }
 
-    public function updated($field) {}
+    public function updated($field)
+    {
+        if (in_array($field, ['newJumlah', 'newHarga'])) {
+            $this->recalculateNewTotal();
+        }
+    }
+
+    public function recalculateNewTotal()
+    {
+        $jumlah = (int) $this->newJumlah;
+        $harga = (int) $this->newHarga;
+
+        if ($jumlah > 0 && $harga > 0) {
+            $total = $jumlah * $harga;
+            $this->newHargaRupiah = number_format($harga, 0, ',', '.');
+            $this->dispatch('update-total', total: number_format($total, 0, ',', '.'));
+        }
+    }
+
     public function addToList()
     {
+        // Validasi sederhana
+        if (!$this->newBahan || !$this->newJumlah || !$this->newHarga) {
+            $this->addError('newBahan', 'Semua field harus diisi');
+            return;
+        }
+
         $this->list[] = [
             'bahan' => $this->newBahan,
             'bahanNama' => $this->newBahan->nama,
@@ -31,9 +56,25 @@ class ListBeli extends Component
             'hargaRupiah' => $this->newHargaRupiah,
             'keterangan' => $this->newKeterangan ?? '-'
         ];
+
+        // Reset & hitung ulang
         $this->totalSum();
-        $this->reset('newBahan', 'newJumlah', 'newHarga', 'newKeterangan');
+        $this->reset('newBahan', 'newJumlah', 'newHarga', 'newHargaRupiah', 'newKeterangan');
     }
+
+    public function removeList($index)
+    {
+        $bahan = $this->list[$index]['bahan'] ?? null;
+        if ($bahan) {
+            // Dispatch ke SelectBahan untuk mengembalikan bahan
+            $this->dispatch('return_bahan', id: $bahan->id);
+        }
+
+        unset($this->list[$index]);
+        $this->list = array_values($this->list);
+        $this->totalSum();
+    }
+
 
     public function totalSum()
     {
@@ -46,12 +87,6 @@ class ListBeli extends Component
         return $total;
     }
 
-    public function removeList($index)
-    {
-        unset($this->list[$index]); // Hapus item dari array
-        $this->list = array_values($this->list); // Reset index array agar tetap berurutan
-        $this->totalSum();
-    }
 
     public function saveList()
     {
@@ -60,8 +95,8 @@ class ListBeli extends Component
         foreach ($this->list as $key => $value) {
             $jumlahKonversi = $value['bahan']->konversi * $value['jumlah'];
             $data[] = [
+                'jenis' => 'IN',
                 'kode' => $kode,
-                'jenis' => true,
                 'bahan_id' => $value['bahan']->id,
                 'jumlah' => $jumlahKonversi,
                 'keterangan' => $value['keterangan'],
@@ -70,7 +105,7 @@ class ListBeli extends Component
                 'updated_at' => now(),
             ];
         }
-        Pembelian::insert($data);
+        LogStok::insert($data);
         $this->reset();
         $this->totalSum();
     }

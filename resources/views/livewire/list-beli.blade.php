@@ -98,38 +98,33 @@
 @pushOnce('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-            const inputHarga = document.getElementById('newHarga');
-            const inputJumlah = document.getElementById('newJumlah');
-            const inputTotal = document.getElementById('newTotal');
-            const addButton = document.getElementById('addToList');
+        const inputHarga = document.getElementById('newHarga');
+        const inputJumlah = document.getElementById('newJumlah');
+        const inputTotal = document.getElementById('newTotal');
+        const addButton = document.getElementById('addToList');
 
-            if (inputHarga) {
-                inputHarga.addEventListener('keyup', function () {
-                    let rawValue = inputHarga.value.replace(/[^0-9]/g, ''); // Ambil hanya angka
-                    let jumlah = inputJumlah.value.replace(/[^0-9]/g, ''); // Ambil hanya angka
-                    console.log(jumlah);
-                    
-                    let formattedValue = new Intl.NumberFormat('id-ID', {
-                        minimumFractionDigits: 0
-                    }).format(rawValue);
+        if (inputHarga) {
+            inputHarga.addEventListener('keyup', function () {
+                let rawValue = inputHarga.value.replace(/[^0-9]/g, '');
+                let formattedValue = new Intl.NumberFormat('id-ID').format(rawValue);
+                inputHarga.value = formattedValue;
+                @this.set('newHarga', rawValue);
+            });
+        }
 
-                    inputHarga.value = formattedValue;
-                    let total = rawValue * jumlah;
-                    let formattedJumlah = new Intl.NumberFormat('id-ID', {
-                    minimumFractionDigits: 0
-                    }).format(total);
-                    inputTotal.value = formattedJumlah;
-                    @this.set('newHarga', rawValue);
-                    @this.set('newHargaRupiah', formattedValue);
-                });
-            }
-            if (inputHarga) {
-                addButton.addEventListener('click', function () {
-                inputHarga.value = null; // Ambil hanya angka
-                inputTotal.value = null; // Ambil hanya angka
+        if (addButton) {
+            addButton.addEventListener('click', function () {
+                inputHarga.value = null;
+                inputTotal.value = null;
+            });
+        }
 
-                });
+        window.addEventListener('update-total', event => {
+            const total = event.detail.total;
+            if (inputTotal) {
+                inputTotal.value = total;
             }
         });
+    });
 </script>
 @endPushOnce
