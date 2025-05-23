@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
             ListMenu::factory(fake()->numberBetween(3, 7))->fillMenu($value)->create();
         }
         Transaksi::factory(10)->create();
-        LogStok::factory(10)->create();
+        LogStok::factory(1000)->create();
 
         User::factory()->create([
             'name' => 'User',

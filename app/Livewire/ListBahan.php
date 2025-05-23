@@ -14,9 +14,16 @@ class ListBahan extends Component
     {
         return Bahan::paginate(5);
     }
+
+
     public function render()
     {
         $bahans = $this->fetchData();
+        // Tambahkan total stok ke setiap item
+        foreach ($bahans as $bahan) {
+            $bahan->total_stok = $bahan->getTotalStok();
+        }
+
         return view('livewire.list-bahan', compact('bahans'));
     }
 }

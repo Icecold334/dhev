@@ -9,4 +9,14 @@ class Transaksi extends Model
 {
     /** @use HasFactory<\Database\Factories\TransaksiFactory> */
     use HasFactory;
+
+    protected $guarded = ['id'];
+
+
+
+
+    public function menu()
+    {
+        return $this->belongsTo(Menu::class);
+    }
 }

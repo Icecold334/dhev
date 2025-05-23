@@ -24,4 +24,23 @@ class Bahan extends Model
     {
         return $this->belongsTo(Satuan::class, 'kecil_id');
     }
+
+    public function logStoks()
+    {
+        return $this->hasMany(LogStok::class);
+    }
+
+    public function getTotalStok()
+    {
+        $totalKecil = $this->logStoks()->sum('jumlah');
+
+        // konversi ke satuan besar
+        $jumlahBesar = floor($totalKecil / $this->konversi);
+        // $sisaKecil = $totalKecil % $this->konversi;
+
+        return [
+            'besar' => $jumlahBesar,
+            'kecil' => $totalKecil,
+        ];
+    }
 }

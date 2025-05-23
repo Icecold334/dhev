@@ -9,12 +9,6 @@
                     Nama Bahan
                 </th>
                 <th scope="col">
-                    Satuan Besar
-                </th>
-                <th scope="col">
-                    Satuan Kecil
-                </th>
-                <th scope="col">
                     Sisa
                 </th>
                 <th scope="col"></th>
@@ -30,14 +24,8 @@
                     {{ $bahan->nama }}
                 </td>
                 <td>
-                    {{ $bahan->satuanBesar->nama }}
-                </td>
-                <td>
-                    {{ $bahan->satuanKecil->nama }}
-                </td>
-                <td>
-                    50 Kg - 50000 Gram
-                </td>
+                    {{ $bahan->total_stok['besar'] }} {{ $bahan->satuanBesar->nama }} -
+                    {{ $bahan->total_stok['kecil'] }} {{ $bahan->satuanKecil->nama }} </td>
                 <td class="px-6 py-4 flex">
                     <a href="#" class="font-medium text-zinc-100 dark:text-zinc-500 hover:underline">
                         <flux:icon.pencil-square />
