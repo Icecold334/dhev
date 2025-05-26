@@ -9,4 +9,14 @@ class ListMenu extends Model
 {
     /** @use HasFactory<\Database\Factories\ListMenuFactory> */
     use HasFactory;
+    protected $guarded = ['id'];
+
+    public function bahan()
+    {
+        return $this->belongsTo(Bahan::class);
+    }
+    public function menu()
+    {
+        return $this->belongsTo(Menu::class);
+    }
 }

@@ -1,1 +1,3 @@
-<x-layouts.app :title="__('Penjualan')"></x-layouts.app>
+<x-layouts.app :title="__('Penjualan')">
+  <livewire:kasir-penjualan />
+</x-layouts.app>

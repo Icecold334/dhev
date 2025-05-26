@@ -9,4 +9,6 @@ class LogStok extends Model
 {
     /** @use HasFactory<\Database\Factories\LogStokFactory> */
     use HasFactory;
+
+    protected $guarded = ['id'];
 }

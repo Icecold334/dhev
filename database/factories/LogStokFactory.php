@@ -26,7 +26,7 @@ class LogStokFactory extends Factory
             'transaksi_id' => $jenis === 'OUT' ? Transaksi::inRandomOrder()->first()->id : null,
             'bahan_id' => Bahan::inRandomOrder()->first()->id,
             'jumlah' => fake()->numberBetween(50, 200),
-            'harga' => fake()->numberBetween(10, 70) * 1000,
+            'harga' => $jenis === 'OUT' ? null : fake()->numberBetween(10, 70) * 1000,
             'keterangan' => fake()->boolean ? fake()->sentence : ''
         ];
     }
