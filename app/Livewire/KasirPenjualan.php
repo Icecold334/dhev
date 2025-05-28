@@ -16,6 +16,7 @@ class KasirPenjualan extends Component
 {
     public $cart = [], $search = ''; // format: [menu_id => jumlah]
 
+    public function mount() {}
     public function tambahMenu($menuId)
     {
         if (isset($this->cart[$menuId])) {
@@ -73,7 +74,7 @@ class KasirPenjualan extends Component
 
     public function render()
     {
-        $menus = Menu::where('nama', 'like', '%' . $this->search . '%')->get();
+        $menus = Menu::where('slug', 'like', '%' . Str::slug($this->search) . '%')->get();
         return view('livewire.kasir-penjualan', compact('menus'));
     }
 }

@@ -61,9 +61,9 @@
                             @if(count($cart) > 0 )
                             <!-- ✅ Total Row -->
                             <tr class="bg-gray-100 dark:bg-zinc-700 font-semibold border-t dark:border-zinc-600">
-                                <td class="px-2 py-3 text-gray-900 dark:text-white text-right">Total</td>
-                                <td class="px-2 py-3 text-center">{{ $totalJumlah }}</td>
-                                <td class="px-2 py-3">Rp {{ number_format($totalHarga) }}</td>
+                                <td class="px-2 py-1 text-gray-900 dark:text-white text-right">Total</td>
+                                <td class="px-2 py-1 text-center">{{ $totalJumlah }}</td>
+                                <td class="px-2 py-1">Rp {{ number_format($totalHarga) }}</td>
                                 <td></td>
                             </tr>
                             @endif

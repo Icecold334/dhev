@@ -19,9 +19,9 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             SatuanSeeder::class,
-            BahanSeeder::class
+            BahanSeeder::class,
+            MenuSeeder::class
         ]);
-        Menu::factory(10)->create();
         foreach (Menu::all() as $key => $value) {
             ListMenu::factory(fake()->numberBetween(3, 7))->fillMenu($value)->create();
         }

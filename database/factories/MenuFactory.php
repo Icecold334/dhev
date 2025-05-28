@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Menu;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Menu>
@@ -17,6 +18,8 @@ class MenuFactory extends Factory
      */
     public function definition(): array
     {
+        $slug = new Str;
+
         $namaList = [
             ['nama' => 'Nasi Goreng', 'tipe' => 'makanan'],
             ['nama' => 'Mie Ayam', 'tipe' => 'makanan'],
@@ -40,11 +43,11 @@ class MenuFactory extends Factory
             ['nama' => 'Pecel Lele', 'tipe' => 'makanan'],
         ];
 
-        $namaSudahAda = Menu::pluck('nama')->toArray();
+        $namaSudahAda = Menu::pluck('slug')->toArray();
 
         // Ambil yang belum ada
-        $availableNama = array_filter($namaList, function ($item) use ($namaSudahAda) {
-            return !in_array($item['nama'], $namaSudahAda);
+        $availableNama = array_filter($namaList, function ($item) use ($namaSudahAda, $slug) {
+            return !in_array($slug->slug($item['nama']), $namaSudahAda);
         });
 
         $availableNama = array_values($availableNama); // reset index
@@ -59,9 +62,9 @@ class MenuFactory extends Factory
             $tipe = 'makanan'; // defaultin makanan kalau random
         }
         // dd($nama, $tipe);
-
         return [
             'nama' => $nama,
+            'slug' => $slug->slug($nama),
             'tipe' => $tipe,
             'deskripsi' => fake()->paragraph(),
             'harga' => fake()->numberBetween(10, 50) * 1000,
