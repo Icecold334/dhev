@@ -26,6 +26,8 @@
                     :current="request()->routeIs('jual.index')" wire:navigate>{{ __('Penjualan') }}</flux:navlist.item>
                 <flux:navlist.item icon="inbox-arrow-down" :href="route('beli.index')"
                     :current="request()->routeIs('beli.index')" wire:navigate>{{ __('Pembelian') }}</flux:navlist.item>
+                <flux:navlist.item icon="inbox-arrow-down" :href="route('beli.index')"
+                    :current="request()->routeIs('beli.index')" wire:navigate>{{ __('Laporan') }}</flux:navlist.item>
             </flux:navlist.group>
         </flux:navlist>
 

@@ -38,9 +38,9 @@ class KasirPenjualan extends Component
     public function simpanTransaksi()
     {
         DB::transaction(function () {
+            $kode = 'TRX-' . strtoupper(Str::random(6));
             foreach ($this->cart as $menuId => $jumlah) {
                 $menu = Menu::findOrFail($menuId);
-                $kode = 'TRX-' . strtoupper(Str::random(6));
 
                 $transaksi = Transaksi::create([
                     'kode' => $kode,

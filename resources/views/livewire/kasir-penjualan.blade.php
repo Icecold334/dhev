@@ -7,10 +7,10 @@
                 <input type="text" wire:model.live="search" placeholder="Cari menu" autofocus
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-300 dark:bg-zinc-800 dark:border-zinc-600 dark:text-white">
             </div>
-            @foreach($menus as $menu)
+            @forelse($menus as $menu)
             <div class="bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg shadow p-4">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-zinc-100">{{ $menu->nama }}</h3>
-                <p class="text-sm text-gray-600 dark:text-zinc-400 mb-2">{{ $menu->deskripsi }}</p>
+                {{-- <p class="text-sm text-gray-600 dark:text-zinc-400 mb-2">{{ $menu->deskripsi }}</p> --}}
                 <div class="flex items-center justify-between">
                     <span class="text-green-600 dark:text-green-400 font-semibold">Rp {{ number_format($menu->harga)
                         }}</span>
@@ -18,12 +18,20 @@
                     </flux:button>
                 </div>
             </div>
-            @endforeach
+            @empty
+            <div
+                class="bg-white dark:bg-zinc-800 border col-span-2 border-gray-200 dark:border-zinc-700 rounded-lg shadow p-4">
+                <h3 class="text-lg  text-gray-900 text-center dark:text-zinc-100"><span class="font-semibold">"{{
+                        $search }}"</span> tidak ada
+                    dalam
+                    daftar menu.</h3>
+
+            </div>
+            @endforelse
         </div>
         <div
             class="col-span-4 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg shadow p-4">
             <div>
-                @if(count($cart) > 0 || 1)
 
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm text-left text-gray-600 dark:text-zinc-300">
@@ -40,9 +48,9 @@
                             $totalJumlah = 0;
                             $totalHarga = 0;
                             @endphp
-                            @foreach($cart as $menuId => $jumlah)
+                            @forelse($cart as $menuId => $jumlah)
                             @php
-                            $menu = $menus->find($menuId);
+                            $menu = App\Models\Menu::find($menuId);
                             $totalJumlah += $jumlah;
                             $totalHarga += $menu->harga * $jumlah;
                             @endphp
@@ -57,7 +65,15 @@
 
                                 </td>
                             </tr>
-                            @endforeach
+                            @empty
+                            <tr class="bg-white dark:bg-zinc-800  dark:border-zinc-700">
+                                <td class="px-2 py-3 font-medium text-gray-900 dark:text-zinc-100 text-center"
+                                    colspan="4">
+                                    Daftar Kosong.</td>
+
+                                </td>
+                            </tr>
+                            @endforelse
                             @if(count($cart) > 0 )
                             <!-- ✅ Total Row -->
                             <tr class="bg-gray-100 dark:bg-zinc-700 font-semibold border-t dark:border-zinc-600">
@@ -77,11 +93,7 @@
                     @endif
 
                 </div>
-                @else
-                <p class="text-gray-500 dark:text-zinc-400 font-semibold text-2xl mt-10 text-center">Belum ada menu yang
-                    dipilih.
-                </p>
-                @endif
+
             </div>
         </div>
     </div>
