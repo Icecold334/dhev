@@ -9,14 +9,14 @@
     <flux:sidebar sticky stashable class="border-r border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
         <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
-        <a href="{{ route('dashboard') }}" class="me-5 flex items-center space-x-2 rtl:space-x-reverse" wire:navigate>
+        <a href="{{ route('dashboard') }}" class="me-5 flex items-center space-x-2 rtl:space-x-reverse">
             <x-app-logo />
         </a>
 
         <flux:navlist variant="outline">
             <flux:navlist.group :heading="__('Platform')" class="grid">
                 <flux:navlist.item icon="chart-pie" :href="route('dashboard')"
-                    :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+                    :current="request()->routeIs('dashboard')">{{ __('Dashboard') }}</flux:navlist.item>
                 <flux:navlist.item icon="clipboard-document-list" :href="route('menu.index')"
                     :current="request()->routeIs('menu.index')" wire:navigate>{{ __('Menu') }}</flux:navlist.item>
                 <flux:navlist.item icon="archive-box" :href="route('bahan.index')"
@@ -26,8 +26,14 @@
                     :current="request()->routeIs('jual.index')" wire:navigate>{{ __('Penjualan') }}</flux:navlist.item>
                 <flux:navlist.item icon="inbox-arrow-down" :href="route('beli.index')"
                     :current="request()->routeIs('beli.index')" wire:navigate>{{ __('Pembelian') }}</flux:navlist.item>
-                <flux:navlist.item icon="inbox-arrow-down" :href="route('beli.index')"
-                    :current="request()->routeIs('beli.index')" wire:navigate>{{ __('Laporan') }}</flux:navlist.item>
+                <flux:navlist.item icon="arrow-trending-up" :href="route('laporan.index',['type'=>'jual'])"
+                    :current="request()->is('laporan/jual')" wire:navigate>{{ __('Laporan
+                    Penjualan') }}
+                </flux:navlist.item>
+                <flux:navlist.item icon="arrow-trending-down" :href="route('laporan.index',['type'=>'beli'])"
+                    :current="request()->is('laporan/beli')" wire:navigate>{{ __('Laporan
+                    Pembelian') }}
+                </flux:navlist.item>
             </flux:navlist.group>
         </flux:navlist>
 

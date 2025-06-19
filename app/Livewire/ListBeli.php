@@ -108,6 +108,7 @@ class ListBeli extends Component
         LogStok::insert($data);
         $this->reset();
         $this->totalSum();
+        $this->dispatch('toast', type: 'success', message: 'Data pembelian berhasil disimpan!');
     }
 
 

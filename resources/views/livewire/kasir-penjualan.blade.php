@@ -97,5 +97,23 @@
             </div>
         </div>
     </div>
-
+    @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        window.addEventListener('toast', event => {
+            const { type, message } = event.detail;
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: type,
+                title: message,
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                background: '#333',
+                color: '#fff'
+            });
+        });
+    </script>
+    @endpush
 </div>

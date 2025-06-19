@@ -67,6 +67,11 @@ class KasirPenjualan extends Component
                     ]);
                 }
             }
+            $this->dispatch(
+                'toast',
+                type: 'success',
+                message: 'Transaksi berhasil!'
+            );
 
             $this->reset('cart');
         });

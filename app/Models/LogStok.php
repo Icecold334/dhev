@@ -11,4 +11,9 @@ class LogStok extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
+
+    public function bahan()
+    {
+        return $this->belongsTo(Bahan::class);
+    }
 }
