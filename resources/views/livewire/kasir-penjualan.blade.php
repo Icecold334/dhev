@@ -7,27 +7,46 @@
                 <input type="text" wire:model.live="search" placeholder="Cari menu" autofocus
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-300 dark:bg-zinc-800 dark:border-zinc-600 dark:text-white">
             </div>
-            @forelse($menus as $menu)
-            <div class="bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg shadow p-4">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-zinc-100">{{ $menu->nama }}</h3>
-                {{-- <p class="text-sm text-gray-600 dark:text-zinc-400 mb-2">{{ $menu->deskripsi }}</p> --}}
-                <div class="flex items-center justify-between">
-                    <span class="text-green-600 dark:text-green-400 font-semibold">Rp {{ number_format($menu->harga)
-                        }}</span>
-                    <flux:button wire:click="tambahMenu({{ $menu->id }})"> Tambah
-                    </flux:button>
-                </div>
-            </div>
-            @empty
-            <div
-                class="bg-white dark:bg-zinc-800 border col-span-2 border-gray-200 dark:border-zinc-700 rounded-lg shadow p-4">
-                <h3 class="text-lg  text-gray-900 text-center dark:text-zinc-100"><span class="font-semibold">"{{
-                        $search }}"</span> tidak ada
-                    dalam
-                    daftar menu.</h3>
+            <div class="grid grid-cols-2 gap-6 col-span-2 max-h-[35rem] overflow-y-scroll">
+                @forelse($menus as $menu)
+                @php
+                $bahanKurang = false;
+                foreach ($menu->listMenus as $item) {
+                if ($item->bahan->getTotalStok()['kecil'] < $item->jumlah * (($cart[$menu->id] ?? 0) + 1)) {
+                    $bahanKurang = true;
+                    break;
+                    }
+                    }
+                    @endphp
 
+                    <div
+                        class="bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg shadow p-4">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-zinc-100 flex items-center gap-2">
+                            {{ $menu->nama }}
+                            @if($bahanKurang)
+                            <span
+                                class="text-xs font-medium bg-red-100 text-red-700 dark:bg-red-800 dark:text-red-200 px-2 py-0.5 rounded-full">
+                                Stok habis
+                            </span>
+                            @endif
+                        </h3>
+
+                        <div class="flex items-center justify-between mt-2">
+                            <span class="text-green-600 dark:text-green-400 font-semibold">
+                                Rp {{ number_format($menu->harga) }}
+                            </span>
+                            <flux:button wire:click="tambahMenu({{ $menu->id }})">Tambah</flux:button>
+                        </div>
+                    </div>
+                    @empty
+                    <div
+                        class="bg-white dark:bg-zinc-800 border col-span-2 border-gray-200 dark:border-zinc-700 rounded-lg shadow p-4">
+                        <h3 class="text-lg text-gray-900 text-center dark:text-zinc-100">
+                            <span class="font-semibold">"{{ $search }}"</span> tidak ada dalam daftar menu.
+                        </h3>
+                    </div>
+                    @endforelse
             </div>
-            @endforelse
         </div>
         <div
             class="col-span-4 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg shadow p-4">
@@ -116,4 +135,5 @@
         });
     </script>
     @endpush
+
 </div>

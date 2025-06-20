@@ -29,7 +29,10 @@
                     <flux:input wire:model='list.{{ $index }}.bahanNama' disabled />
                 </th>
                 <td class="px-6 py-4">
-                    <flux:input type="number" wire:model='list.{{ $index }}.jumlah' disabled />
+                    <flux:input.group>
+                        <flux:input type="number" wire:model='list.{{ $index }}.jumlah' disabled />
+                        <flux:input.group.suffix>{{ $item['satuan'] }}</flux:input.group.suffix>
+                    </flux:input.group>
                 </td>
                 <td class="px-6 py-4">
                     <flux:input.group>
@@ -63,7 +66,10 @@
                     <flux:input value="{{ $newBahan->nama ?? null }}" placeholder="Pilih bahan di atas" disabled />
                 </th>
                 <td class="px-6 py-4">
-                    <flux:input type="number" wire:model.live='newJumlah' id="newJumlah" placeholder="Jumlah" />
+                    <flux:input.group>
+                        <flux:input type="number" wire:model.live='newJumlah' id="newJumlah" placeholder="Jumlah" />
+                        <flux:input.group.suffix>{{ $newSatuan ?? 'Satuan' }}</flux:input.group.suffix>
+                    </flux:input.group>
                 </td>
                 <th scope="row" class="px-6 py-4 font-medium text-zinc-900 whitespace-nowrap dark:text-white">
 

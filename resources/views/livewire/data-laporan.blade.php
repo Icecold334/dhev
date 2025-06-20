@@ -2,7 +2,7 @@
     {{-- Search & Filter --}}
     <div class="flex flex-col sm:flex-row items-center justify-between gap-2">
         <input type="text" wire:model.live="search"
-            class="border border-gray-300 dark:border-zinc-700 rounded-md px-3 py-2 text-sm w-full sm:w-1/3 dark:bg-zinc-900 dark:text-white"
+            class="border border-zinc-300 dark:border-zinc-700 rounded-md px-3 py-2 text-sm w-full sm:w-1/3 dark:bg-zinc-900 dark:text-white"
             placeholder="Cari berdasar kode transaksi">
 
         <div class="flex gap-6">
@@ -17,8 +17,8 @@
 
     {{-- Table --}}
     <div class="overflow-x-auto rounded-md">
-        <table class="w-full text-sm text-left text-gray-700 dark:text-zinc-200 border dark:border-zinc-600">
-            <thead class="text-xs uppercase bg-gray-100 dark:bg-zinc-700">
+        <table class="w-full text-sm text-left text-zinc-700 dark:text-zinc-200 border dark:border-zinc-600">
+            <thead class="text-xs uppercase bg-zinc-100 dark:bg-zinc-700">
                 <tr>
                     <th class="px-4 py-2">#</th>
                     <th class="px-4 py-2">Kode Transaksi</th>
@@ -55,23 +55,43 @@
                 <h2 class="text-lg font-semibold">Detail Transaksi: {{ $selectedKode }}</h2>
                 <button wire:click="$set('showModal', false)">❌</button>
             </div>
-            <div class="space-y-2">
-                @if($type === 'jual')
-                @foreach($detailItems as $item)
-                <div class="flex justify-between border-b pb-1">
-                    <span>{{ $item->menu->nama }}</span>
-                    <span>{{ $item->jumlah }} x Rp {{ number_format($item->harga, 0, ',', '.') }}</span>
-                </div>
-                @endforeach
-                @else
-                @foreach($detailItems as $item)
-                <div class="flex justify-between border-b pb-1">
-                    <span>{{ $item->bahan->nama }}</span>
-                    <span>{{ $item->jumlah }} x Rp {{ number_format($item->harga ?? 0, 0, ',', '.') }}</span>
-                </div>
-                @endforeach
-                @endif
-            </div>
+            <table class="w-full border border-zinc-300 dark:border-zinc-600 text-sm">
+                <thead class="bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200">
+                    <tr>
+                        <th class="text-left p-2 border dark:border-zinc-600">Nama</th>
+                        @if($type === 'jual')
+                        <th class="text-left p-2 border dark:border-zinc-600">Jumlah x Harga</th>
+                        @else
+                        <th class="text-left p-2 border dark:border-zinc-600">Keterangan</th>
+                        <th class="text-left p-2 border dark:border-zinc-600">Jumlah x Harga</th>
+                        @endif
+                    </tr>
+                </thead>
+                <tbody class="bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-100">
+                    @if($type === 'jual')
+                    @foreach($detailItems as $item)
+                    <tr class="border-t border-zinc-300 dark:border-zinc-600">
+                        <td class="p-2 border dark:border-zinc-600">{{ $item->menu->nama }}</td>
+                        <td class="p-2 border dark:border-zinc-600">
+                            {{ $item->jumlah }} x Rp {{ number_format($item->harga, 0, ',', '.') }}
+                        </td>
+                    </tr>
+                    @endforeach
+                    @else
+                    @foreach($detailItems as $item)
+                    <tr class="border-t border-zinc-300 dark:border-zinc-600">
+                        <td class="p-2 border dark:border-zinc-600">{{ $item->bahan->nama }}</td>
+                        <td class="p-2 border dark:border-zinc-600">{{ $item->keterangan ?? '-' }}</td>
+                        <td class="p-2 border dark:border-zinc-600">
+                            {{ round($item->jumlah / $item->bahan->konversi, 1) }}
+                            {{ $item->bahan->satuanBesar->nama }}
+                            x Rp {{ number_format($item->harga ?? 0, 0, ',', '.') }}
+                        </td>
+                    </tr>
+                    @endforeach
+                    @endif
+                </tbody>
+            </table>
         </div>
     </div>
     @endif

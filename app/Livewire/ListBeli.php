@@ -11,7 +11,7 @@ use Livewire\Component;
 
 class ListBeli extends Component
 {
-    public $list = [], $newBahan, $newHarga, $newHargaRupiah, $newJumlah, $newKeterangan;
+    public $list = [], $newBahan, $newHarga, $newHargaRupiah, $newJumlah, $newKeterangan, $newSatuan = null;
 
 
     #[On('bahan_id')]
@@ -19,6 +19,7 @@ class ListBeli extends Component
     {
         $bahan = Bahan::find($id);
         $this->newBahan = $bahan;
+        $this->newSatuan = $bahan->satuanBesar->nama;
     }
 
     public function updated($field)
@@ -53,13 +54,14 @@ class ListBeli extends Component
             'bahanNama' => $this->newBahan->nama,
             'jumlah' => $this->newJumlah,
             'harga' => $this->newHarga,
+            'satuan' => $this->newSatuan,
             'hargaRupiah' => $this->newHargaRupiah,
             'keterangan' => $this->newKeterangan ?? '-'
         ];
 
         // Reset & hitung ulang
         $this->totalSum();
-        $this->reset('newBahan', 'newJumlah', 'newHarga', 'newHargaRupiah', 'newKeterangan');
+        $this->reset('newBahan', 'newJumlah', 'newHarga', 'newHargaRupiah', 'newKeterangan', 'newSatuan');
     }
 
     public function removeList($index)

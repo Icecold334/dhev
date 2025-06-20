@@ -23,9 +23,9 @@
                     :current="request()->routeIs('bahan.index')" wire:navigate>{{ __('Stok Bahan') }}
                 </flux:navlist.item>
                 <flux:navlist.item icon="shopping-cart" :href="route('jual.index')"
-                    :current="request()->routeIs('jual.index')" wire:navigate>{{ __('Penjualan') }}</flux:navlist.item>
+                    :current="request()->routeIs('jual.index')">{{ __('Penjualan') }}</flux:navlist.item>
                 <flux:navlist.item icon="inbox-arrow-down" :href="route('beli.index')"
-                    :current="request()->routeIs('beli.index')" wire:navigate>{{ __('Pembelian') }}</flux:navlist.item>
+                    :current="request()->routeIs('beli.index')">{{ __('Pembelian') }}</flux:navlist.item>
                 <flux:navlist.item icon="arrow-trending-up" :href="route('laporan.index',['type'=>'jual'])"
                     :current="request()->is('laporan/jual')" wire:navigate>{{ __('Laporan
                     Penjualan') }}

@@ -25,7 +25,7 @@ Route::get('dashboard', function () {
         ->sum(DB::raw('harga * jumlah'));
 
     // === Jumlah Transaksi Hari Ini ===
-    $totalTransaksi = Transaksi::whereDate('created_at', $today)
+    $totalTransaksi = Transaksi::whereDate('created_at', $today)->distinct('kode')
         ->count();
 
     // === Menu Terfavorit Hari Ini ===

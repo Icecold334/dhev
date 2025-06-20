@@ -32,11 +32,12 @@ class Bahan extends Model
 
     public function getTotalStok()
     {
-        $totalKecil = $this->logStoks()->sum('jumlah');
+        $in = $this->logStoks()->where('jenis', 'IN')->sum('jumlah');
+        $out = $this->logStoks()->where('jenis', 'OUT')->sum('jumlah');
+        $totalKecil = max($in - $out, 0);
 
-        // konversi ke satuan besar
-        $jumlahBesar = floor($totalKecil / $this->konversi);
-        // $sisaKecil = $totalKecil % $this->konversi;
+        // konversi ke satuan besar dengan 1 angka di belakang koma
+        $jumlahBesar = round($totalKecil / $this->konversi, 1);
 
         return [
             'besar' => $jumlahBesar,
