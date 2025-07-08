@@ -1,3 +1,3 @@
-<x-layouts.app title="Laporan">
+<x-layouts.body title="Laporan">
   <livewire:data-laporan />
-</x-layouts.app>
+</x-layouts.body>

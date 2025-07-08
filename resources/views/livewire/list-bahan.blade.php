@@ -40,6 +40,10 @@
                         </flux:button>
                         <flux:button icon="trash" wire:click="confirmDelete({{ $bahan->id }})" class="ml-2"
                             variant="danger"></flux:button>
+                        <flux:button icon="adjustments-horizontal" class="ml-2" variant="primary" color="amber"
+                            wire:click="openOpname({{ $bahan->id }})">
+                        </flux:button>
+
                     </td>
                 </tr>
                 @endforeach
@@ -61,21 +65,21 @@
             </div>
 
             <div class="space-y-4">
-                <input type="text" wire:model.defer="form.nama" placeholder="Nama Bahan"
+                <input type="text" wire:model.live="form.nama" placeholder="Nama Bahan"
                     class="w-full border px-3 py-2 rounded dark:bg-zinc-900">
 
-                <input type="number" wire:model.defer="form.konversi"
+                <input type="number" wire:model.live="form.konversi"
                     placeholder="Jumlah Konversi (berapa kecil per besar)"
                     class="w-full border px-3 py-2 rounded dark:bg-zinc-900">
 
-                <select wire:model.defer="form.besar_id" class="w-full border px-3 py-2 rounded dark:bg-zinc-900">
+                <select wire:model.live="form.besar_id" class="w-full border px-3 py-2 rounded dark:bg-zinc-900">
                     <option value="">-- Pilih Satuan Besar --</option>
                     @foreach($allSatuan as $satuan)
                     <option value="{{ $satuan->id }}">{{ $satuan->nama }}</option>
                     @endforeach
                 </select>
 
-                <select wire:model.defer="form.kecil_id" class="w-full border px-3 py-2 rounded dark:bg-zinc-900">
+                <select wire:model.live="form.kecil_id" class="w-full border px-3 py-2 rounded dark:bg-zinc-900">
                     <option value="">-- Pilih Satuan Kecil --</option>
                     @foreach($allSatuan as $satuan)
                     <option value="{{ $satuan->id }}">{{ $satuan->nama }}</option>
@@ -102,6 +106,32 @@
                 <button wire:click="$set('showDeleteConfirm', false)"
                     class="px-4 py-2 bg-gray-300 dark:bg-zinc-600 rounded">Batal</button>
                 <button wire:click="delete" class="px-4 py-2 bg-red-600 text-white rounded">Hapus</button>
+            </div>
+        </div>
+    </div>
+    @endif
+
+    @if($showOpnameModal)
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 dark:bg-black/70">
+        <div class="bg-white dark:bg-zinc-800 text-black dark:text-white p-6 rounded shadow-md w-full max-w-md">
+            <h2 class="text-lg font-semibold mb-4">Stok Opname: {{ $selectedBahan?->nama }}</h2>
+
+
+            <p class="mb-2 text-sm">
+                Stok saat ini: {{ $selectedBahan?->getTotalStok()['besar'] }} {{ $selectedBahan?->satuanBesar->nama ??
+                '' }}
+            </p>
+
+            <input type="number" wire:model.live="stokOpnameInput"
+                class="w-full border px-3 py-2 rounded dark:bg-zinc-900"
+                placeholder="Jumlah stok nyata (satuan besar)" />
+
+
+
+            <div class="mt-6 flex justify-end gap-3">
+                <button wire:click="$set('showOpnameModal', false)"
+                    class="px-4 py-2 bg-gray-300 dark:bg-zinc-600 rounded">Batal</button>
+                <button wire:click="saveOpname" class="px-4 py-2 bg-green-600 text-white rounded">Simpan</button>
             </div>
         </div>
     </div>

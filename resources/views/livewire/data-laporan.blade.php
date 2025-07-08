@@ -5,13 +5,28 @@
             class="border border-zinc-300 dark:border-zinc-700 rounded-md px-3 py-2 text-sm w-full sm:w-1/3 dark:bg-zinc-900 dark:text-white"
             placeholder="Cari berdasar kode transaksi">
 
-        <div class="flex gap-6">
+        <div class="flex gap-3">
+            <flux:select wire:model.live="filterBulan">
+                <flux:select.option value="">Semua Bulan</flux:select.option>
+                @for ($m = 1; $m <= 12; $m++) <flux:select.option value="{{ $m }}">{{
+                    \Carbon\Carbon::create()->month($m)->translatedFormat('F') }}</flux:select.option>
+                    @endfor
+            </flux:select>
 
+            <flux:select wire:model.live="filterTahun">
+                <flux:select.option value="">Semua Tahun</flux:select.option>
+                @for ($y = now()->year; $y >= now()->year - 5; $y--)
+                <flux:select.option value="{{ $y }}">{{ $y }}</flux:select.option>
+                @endfor
+            </flux:select>
             <flux:select wire:model.live="perPage">
                 <flux:select.option value="5">5</flux:select.option>
                 <flux:select.option value="10">10</flux:select.option>
                 <flux:select.option value="15">15</flux:select.option>
             </flux:select>
+            <flux:button icon="document-arrow-down" wire:click="exportExcel">
+                Download Excel
+            </flux:button>
         </div>
     </div>
 

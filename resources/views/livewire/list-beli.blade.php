@@ -1,5 +1,5 @@
 <div class="relative overflow-x-auto  sm:rounded-lg">
-    <table class="w-full text-sm text-left rtl:text-right text-zinc-500 dark:text-zinc-400">
+    <table class="w-full text-sm text-left  text-zinc-500 dark:text-zinc-400">
         <thead class="text-xs text-zinc-700 uppercase bg-zinc-50 dark:bg-zinc-900 dark:text-zinc-400">
             <tr class="text-center">
                 <th scope="col" class="px-6 py-3">
@@ -67,7 +67,7 @@
                 </th>
                 <td class="px-6 py-4">
                     <flux:input.group>
-                        <flux:input type="number" wire:model.live='newJumlah' id="newJumlah" placeholder="Jumlah" />
+                        <flux:input type="number" wire:model='newJumlah' id="newJumlah" placeholder="Jumlah" />
                         <flux:input.group.suffix>{{ $newSatuan ?? 'Satuan' }}</flux:input.group.suffix>
                     </flux:input.group>
                 </td>
@@ -147,8 +147,6 @@
             showConfirmButton: false,
             timer: 2000,
             timerProgressBar: true,
-            background: '#333',
-            color: '#fff'
         });
     });
 </script>

@@ -95,6 +95,65 @@ class KasirPenjualan extends Component
         return true;
     }
 
+    public function updateJumlah($menuId, $jumlahInput)
+    {
+        $menu = Menu::findOrFail($menuId);
+        $jumlahInput = (int) $jumlahInput;
+
+        if ($jumlahInput < 1) {
+            unset($this->cart[$menuId]);
+            return;
+        }
+
+        $maksPorsi = $this->getMaksimalPorsi($menu);
+
+        if ($jumlahInput > $maksPorsi) {
+            $jumlahInput = $maksPorsi;
+            $this->dispatch('toast', type: 'warning', message: 'Jumlah melebihi stok. Diatur ke maksimum: ' . $maksPorsi . ' porsi.');
+        }
+
+        $this->cart[$menuId] = $jumlahInput;
+    }
+
+    public function updatedCart($value, $key)
+    {
+        // $key = menuId
+        $menuId = $key;
+        $jumlahInput = (int) $value;
+
+        if ($jumlahInput < 1) {
+            $this->cart[$menuId] = 1;
+            return;
+        }
+
+        $menu = Menu::findOrFail($menuId);
+        $maksPorsi = $this->getMaksimalPorsi($menu);
+
+        if ($jumlahInput > $maksPorsi) {
+            $this->cart[$menuId] = $maksPorsi;
+            $this->dispatch('toast', type: 'warning', message: 'Jumlah melebihi stok. Diatur ke maksimum: ' . $maksPorsi . ' porsi.');
+        }
+    }
+    public function hapusMenu($menuId)
+    {
+        unset($this->cart[$menuId]);
+    }
+
+
+
+    private function getMaksimalPorsi($menu)
+    {
+        $maksPorsi = INF;
+
+        foreach ($menu->listMenus as $item) {
+            $stok = $item->bahan->getTotalStok()['kecil'];
+            $porsi = floor($stok / $item->jumlah);
+            $maksPorsi = min($maksPorsi, $porsi);
+        }
+
+        return max((int) $maksPorsi, 0);
+    }
+
     public function render()
     {
         $menus = Menu::where('slug', 'like', '%' . Str::slug($this->search) . '%')->get();

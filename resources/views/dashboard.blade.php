@@ -1,12 +1,12 @@
-<x-layouts.app :title="__('Dashboard')">
+<x-layouts.body :title="__('Dashboard')">
     <div class="flex flex-col gap-6">
         {{-- Stats Card Grid --}}
         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
             {{-- Pendapatan --}}
             <div
-                class="rounded-2xl bg-zinc-800 p-4 shadow border border-zinc-200 dark:border-zinc-700 dark:bg-zinc-800">
-                <p class="text-sm text-zinc-400">Jumlah Pendapatan Hari Ini</p>
-                <h3 class="mt-1 text-2xl font-semibold text-white">Rp {{ number_format($pendapatanHariIni, 0, ',', '.')
+                class="rounded-2xl bg-gradient-to-bl from-primary-50 to-primary-100 p-4 shadow border border-zinc-200 ">
+                <p class="text-sm text-black">Jumlah Pendapatan Hari Ini</p>
+                <h3 class="mt-1 text-2xl font-semibold text-black">Rp {{ number_format($pendapatanHariIni, 0, ',', '.')
                     }}</h3>
                 <div class="relative h-45 max-h-45">
                     <canvas id="pendapatan" data-values='@json($dataPendapatanHariIniChart)'
@@ -16,9 +16,9 @@
 
             {{-- Transaksi --}}
             <div
-                class="rounded-2xl bg-zinc-800 p-4 shadow border border-zinc-200 dark:border-zinc-700 dark:bg-zinc-800">
-                <p class="text-sm text-zinc-400">Jumlah Transaksi Hari Ini</p>
-                <h3 class="mt-1 text-2xl font-semibold text-white">{{ $totalTransaksi }} Transaksi</h3>
+                class="rounded-2xl bg-gradient-to-bl from-primary-50 to-primary-100 p-4 shadow border border-zinc-200 ">
+                <p class="text-sm text-black">Jumlah Transaksi Hari Ini</p>
+                <h3 class="mt-1 text-2xl font-semibold text-black">{{ $totalTransaksi }} Transaksi</h3>
                 <div class="relative h-45 max-h-45">
                     <canvas id="transaksi" data-values='@json($dataTransaksi7Hari)'
                         class="absolute left-0 top-0 h-full w-full"></canvas>
@@ -27,9 +27,9 @@
 
             {{-- Menu Terfavorit --}}
             <div
-                class="rounded-2xl bg-zinc-800 p-4 shadow border border-zinc-200 dark:border-zinc-700 dark:bg-zinc-800">
-                <p class="text-sm text-zinc-400">Menu Terfavorit</p>
-                <h3 class="mt-1 text-2xl font-semibold text-white">{{ $menuTerfavorit }}</h3>
+                class="rounded-2xl bg-gradient-to-bl from-primary-50 to-primary-100 p-4 shadow border border-zinc-200 ">
+                <p class="text-sm text-black">Menu Terfavorit</p>
+                <h3 class="mt-1 text-2xl font-semibold text-black">{{ $menuTerfavorit }}</h3>
                 <div class="relative h-45 max-h-45">
                     <canvas id="menu" data-labels='@json($menuLabels)' data-values='@json($menuValues)'
                         class="absolute left-0 top-0 h-full w-full"></canvas>
@@ -39,9 +39,9 @@
 
         {{-- Grafik Pendapatan 14 Hari --}}
         <div
-            class="relative w-full flex-1 overflow-hidden rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-700 dark:bg-zinc-800">
+            class="relative w-full flex-1 overflow-hidden rounded-xl border border-zinc-200 bg-gradient-to-bl from-primary-50 to-primary-100 p-6 ">
             <div class="flex items-center justify-between mb-4">
-                <h2 class="text-lg font-semibold text-zinc-900 dark:text-white">Grafik Pendapatan 14 Hari Terakhir</h2>
+                <h2 class="text-lg font-semibold text-black ">Grafik Pendapatan 14 Hari Terakhir</h2>
             </div>
             <div class="relative h-52 max-h-52">
                 <canvas id="weeks" data-pendapatan='@json($dataPendapatan14Hari)' class="w-full h-full"></canvas>
@@ -170,4 +170,4 @@ var pendapatanCanvas = document.getElementById('pendapatan');
         });
     </script>
     @endpush
-</x-layouts.app>
+</x-layouts.body>

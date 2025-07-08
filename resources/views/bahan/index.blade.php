@@ -1,3 +1,3 @@
-<x-layouts.app :title="__('Bahan')">
+<x-layouts.body :title="__('Bahan')">
   <livewire:list-bahan />
-</x-layouts.app>
+</x-layouts.body>

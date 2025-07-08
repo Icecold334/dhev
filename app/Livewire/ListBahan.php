@@ -26,9 +26,50 @@ class ListBahan extends Component
         'besar_id' => '',
         'kecil_id' => '',
     ];
+    public $showOpnameModal = false;
+    public $selectedBahan;
+    public $stokOpnameInput;
 
 
     protected $paginationTheme = 'tailwind';
+    public function openOpname($id)
+    {
+        $this->selectedBahan = Bahan::findOrFail($id);
+        $this->stokOpnameInput = ''; // reset input
+        $this->showOpnameModal = true;
+    }
+    public function saveOpname()
+    {
+        $this->validate([
+            'stokOpnameInput' => 'required|numeric|min:0',
+        ]);
+
+        $bahan = $this->selectedBahan;
+        $konversi = $bahan->konversi;
+
+        $stokSekarangKecil = $bahan->getTotalStok()['kecil'];
+        $stokInputBesar = (float) $this->stokOpnameInput;
+        $stokInputKecil = round($stokInputBesar * $konversi);
+
+        $selisih = $stokInputKecil - $stokSekarangKecil;
+
+        if ($selisih !== 0) {
+            $bahan->logStoks()->create([
+                'jenis' => 'ADJ',
+                'kode' => 'ADJ-' . now()->format('YmdHis'),
+                'jumlah' => $selisih,
+                'harga' => 0,
+                'keterangan' => 'Penyesuaian stok opname (' . $stokInputBesar . ' ' . $bahan->satuanBesar->nama . ')',
+            ]);
+        }
+
+        $this->showOpnameModal = false;
+        $this->selectedBahan = null;
+        $this->stokOpnameInput = null;
+
+        session()->flash('message', 'Stok berhasil disesuaikan.');
+    }
+
 
     public function updatingSearch()
     {

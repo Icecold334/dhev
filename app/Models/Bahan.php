@@ -34,9 +34,10 @@ class Bahan extends Model
     {
         $in = $this->logStoks()->where('jenis', 'IN')->sum('jumlah');
         $out = $this->logStoks()->where('jenis', 'OUT')->sum('jumlah');
-        $totalKecil = max($in - $out, 0);
+        $adj = $this->logStoks()->where('jenis', 'ADJ')->sum('jumlah'); // ADJ bisa positif atau negatif
 
-        // konversi ke satuan besar dengan 1 angka di belakang koma
+        $totalKecil = max($in - $out + $adj, 0);
+
         $jumlahBesar = round($totalKecil / $this->konversi, 1);
 
         return [

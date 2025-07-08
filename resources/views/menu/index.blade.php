@@ -1,3 +1,3 @@
-<x-layouts.app :title="__('Menu')">
+<x-layouts.body :title="__('Menu')">
   <livewire:list-menu>
-</x-layouts.app>
+    </x-layouts.bodyapp>
