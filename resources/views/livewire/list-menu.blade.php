@@ -1,175 +1,239 @@
-<div class="space-y-4">
-    <div class="flex flex-col sm:flex-row items-center justify-between gap-2">
-        <input type="text" wire:model.live="search"
-            class="border border-gray-300 dark:border-zinc-700 rounded-md px-3 py-2 text-sm w-full sm:w-1/3 dark:bg-zinc-900 dark:text-white"
-            placeholder="Cari nama menu...">
-
-        <div class="flex gap-6">
-            <flux:button icon="plus" wire:click="openCreateForm">Tambah Menu</flux:button>
-            <flux:select wire:model.live="perPage">
-                <flux:select.option value="5">5</flux:select.option>
-                <flux:select.option value="10">10</flux:select.option>
-                <flux:select.option value="15">15</flux:select.option>
-            </flux:select>
+<div>
+    {{-- Header --}}
+    <div class="grid grid-cols-1 md:grid-cols-2 justify-between mb-6">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="text-4xl font-semibold text-primary-700">Daftar Menu</div>
+                <button wire:click="openCreateForm" type="button"
+                    class="text-primary-100 hover:text-primary-50 bg-primary-700 hover:bg-primary-800 transition duration-200 font-medium rounded-lg text-sm px-3 py-2">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+            </div>
         </div>
+        <div class="flex items-center gap-6 justify-self-end mt-4 md:mt-0">
+            <div class="relative">
+                <div class="absolute inset-y-0 start-0 flex text-primary-600 items-center ps-3.5 pointer-events-none">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <input type="text" wire:model.live="search"
+                    class="bg-primary-50 border border-primary-300 text-primary-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full ps-10 p-2.5"
+                    placeholder="Cari nama menu">
+            </div>
 
+            <select wire:model.live="perPage"
+                class="bg-primary-50 border border-primary-300 text-primary-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-28 p-2.5">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+            </select>
+        </div>
     </div>
 
-    <div class="overflow-x-auto rounded-md">
-        <table class="w-full text-sm text-left text-gray-700 dark:text-zinc-200 border dark:border-zinc-600">
-            <thead class="text-xs uppercase bg-gray-100 dark:bg-zinc-700">
+    {{-- Table --}}
+    <div class="relative overflow-x-auto sm:rounded-lg">
+        <table class="w-full text-sm text-left text-primary-500">
+            <thead class="text-xs text-primary-700 uppercase bg-primary-200">
                 <tr>
-                    <th class="px-4 py-2">#</th>
-                    <th class="px-4 py-2">Nama</th>
-                    <th class="px-4 py-2">Harga</th>
-                    <th class="px-4 py-2 w-1/6 "></th>
+                    <th class="px-6 py-3 text-center">#</th>
+                    <th class="px-6 py-3 text-center">Nama</th>
+                    <th class="px-6 py-3 text-center">Harga</th>
+                    <th class="px-6 py-3 text-center">Aksi</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($menus as $index => $menu)
-                <tr class="border-b dark:border-zinc-600">
-                    <td class="px-4 py-2">{{ ($menus->currentPage() - 1) * $menus->perPage() + $index + 1 }}</td>
-                    <td class="px-4 py-2 font-medium">{{ $menu->nama }}</td>
-                    <td class="px-4 py-2">Rp {{ number_format($menu->harga, 0, ',', '.') }}</td>
-                    <td class="px-4 py-2 text-center">
-                        <flux:button icon="eye" wire:click="showDetail({{ $menu->id }})"></flux:button>
-                        <flux:button icon="pencil" wire:click="openEditForm({{ $menu->id }})" class="ml-2">
-                        </flux:button>
-                        <flux:button icon="trash" wire:click="confirmDelete({{ $menu->id }})" class="ml-2"
-                            variant="danger"></flux:button>
+                @forelse ($menus as $index => $menu)
+                <tr class="odd:bg-white even:bg-primary-100 text-primary-900 border-b border-primary-200">
+                    <td class="px-6 py-4 text-center">{{ ($menus->currentPage() - 1) * $menus->perPage() + $index + 1 }}
+                    </td>
+                    <td class="px-6 py-4 text-center">{{ $menu->nama }}</td>
+                    <td class="px-6 py-4 text-center">Rp {{ number_format($menu->harga, 0, ',', '.') }}</td>
+                    <td class="px-6 py-4 text-center flex justify-center gap-2">
+                        <button wire:click="showDetail({{ $menu->id }})"
+                            class="text-white bg-info-700 hover:bg-info-800 font-medium rounded-md text-xs px-2 py-1">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                        <button wire:click="openEditForm({{ $menu->id }})"
+                            class="text-white bg-warning-500 hover:bg-warning-600 font-medium rounded-md text-xs px-2 py-1">
+                            <i class="fa-solid fa-pencil"></i>
+                        </button>
+                        <button onclick="confirmDelete({{ $menu->id }})"
+                            class="text-white bg-danger-700 hover:bg-danger-800 font-medium rounded-md text-xs px-2 py-1">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
                     </td>
                 </tr>
-                @endforeach
+                @empty
+                <tr class="odd:bg-white even:bg-primary-100 text-primary-900 border-b border-primary-200">
+                    <td colspan="4" class="text-center py-4">Tidak ada menu ditemukan.</td>
+                </tr>
+                @endforelse
             </tbody>
         </table>
+        <div class="mt-4 px-4">{{ $menus->links() }}</div>
     </div>
 
-    <div>
-        {{ $menus->links() }}
-    </div>
-
-    {{-- Modal Detail --}}
-    @if ($showModal && $selectedMenu)
-    <div class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md bg-black/50 dark:bg-black/20">
-        <div class="bg-white dark:bg-zinc-800 text-black dark:text-zinc-100 p-6 rounded-md shadow-md w-full max-w-xl">
-            <div class="flex justify-between items-center border-b border-zinc-200 dark:border-zinc-600 pb-2 mb-4">
-                <h2 class="text-lg font-bold">Detail Menu</h2>
-                <flux:button icon="x-mark" wire:click="$set('showModal', false)" variant="danger"></flux:button>
-            </div>
-
-            <div class="mt-4">
-                <table class="">
-                    <tbody>
-                        <tr class="">
-                            <th class=" w-1/6 text-left">Nama</th>
-                            <th class=" w-1/12">:</th>
-                            <td class="">{{ $selectedMenu->nama }}</td>
-                        </tr>
-                        <tr class="">
-                            <th class=" w-1/6 text-left">Tipe</th>
-                            <th class=" w-1/12">:</th>
-                            <td class="">{{ $selectedMenu->tipe }}</td>
-                        </tr>
-                        <tr class="">
-                            <th class=" w-1/6 text-left">Harga</th>
-                            <th class=" w-1/12">:</th>
-                            <td class="">Rp {{ number_format($selectedMenu->harga, 0, ',', '.') }}</td>
-                        </tr>
-                        <tr>
-                            <th class=" w-1/6 text-left">Deskripsi</th>
-                            <th class=" w-1/12">:</th>
-                            <td class="">{{ $selectedMenu->deskripsi }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="mt-6">
-                <h3 class="font-semibold">Bahan-bahan:</h3>
-                <table
-                    class="w-full mt-2 text-sm text-left text-zinc-700 dark:text-zinc-200 border dark:border-zinc-600">
-                    <thead class="text-xs uppercase bg-zinc-100 dark:bg-zinc-700">
-                        <tr>
-                            <th class="px-3 py-2 border dark:border-zinc-600">#</th>
-                            <th class="px-3 py-2 border dark:border-zinc-600">Nama</th>
-                            <th class="px-3 py-2 border dark:border-zinc-600">Jumlah</th>
-                            {{-- <th class="px-3 py-2 border dark:border-zinc-600">Satuan</th> --}}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($selectedMenu->listMenus as $index => $item)
-                        <tr class="bg-white dark:bg-zinc-800 border-b dark:border-zinc-600">
-                            <td class="px-3 py-2">{{ $index + 1 }}</td>
-                            <td class="px-3 py-2">{{ $item->bahan->nama }}</td>
-                            <td class="px-3 py-2">{{ $item->jumlah }} {{ $item->bahan->satuanKecil->nama ?? '-' }}</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    @endif
+    {{-- Modal Form (Tambah/Edit) --}}
     @if($showFormModal)
-    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 dark:bg-black/70">
-        <div class="bg-white dark:bg-zinc-800 text-black dark:text-white p-6 rounded shadow-md w-full max-w-2xl">
-            <div class="flex justify-between mb-4 border-b pb-2">
-                <h2 class="text-lg font-semibold">{{ $isEditing ? 'Edit' : 'Tambah' }} Menu</h2>
-                <button wire:click="$set('showFormModal', false)">❌</button>
-            </div>
-
-            <div class="grid grid-cols-1 gap-4">
-                <input type="text" wire:model.defer="form.nama" placeholder="Nama Menu"
-                    class="rounded w-full px-3 py-2 border dark:bg-zinc-900">
-                <input type="text" wire:model.defer="form.tipe" placeholder="Tipe"
-                    class="rounded w-full px-3 py-2 border dark:bg-zinc-900">
-                <input type="number" wire:model.defer="form.harga" placeholder="Harga"
-                    class="rounded w-full px-3 py-2 border dark:bg-zinc-900">
-                <textarea wire:model.defer="form.deskripsi" rows="3" placeholder="Deskripsi"
-                    class="rounded w-full px-3 py-2 border dark:bg-zinc-900"></textarea>
-
-                <h3 class="font-semibold">Bahan</h3>
-                <div class="max-h-44 overflow-y-auto pr-2 space-y-2">
-                    @foreach ($form['bahanList'] as $index => $bahan)
-                    <div class="flex items-center gap-2">
-                        <select wire:model.defer="form.bahanList.{{ $index }}.bahan_id"
-                            class="w-1/2 border rounded dark:bg-zinc-900">
-                            <option value="">-- pilih bahan --</option>
-                            @foreach($allBahans as $b)
-                            <option value="{{ $b->id }}">{{ $b->nama }} ({{ $b->satuanKecil->nama ?? '' }})</option>
-                            @endforeach
-                        </select>
-                        <input type="number" wire:model.defer="form.bahanList.{{ $index }}.jumlah"
-                            class="w-1/3 border rounded dark:bg-zinc-900" placeholder="Jumlah">
-                        <button wire:click.prevent="removeBahan({{ $index }})" class="text-red-500">🗑️</button>
-                    </div>
-                    @endforeach
+    <div class="fixed inset-0 z-50 flex justify-center items-center bg-black/50 backdrop-blur-md">
+        <div class="relative w-full max-w-4xl">
+            <div class="relative bg-gradient-to-bl from-primary-50 to-primary-100 rounded-lg shadow ">
+                <div
+                    class="flex items-start justify-between p-4 bg-gradient-to-br from-primary-200 to-primary-300 border-b rounded-t">
+                    <h3 class="text-xl font-semibold text-primary-900">{{ $isEditing ? 'Edit Menu' : 'Tambah Menu' }}
+                    </h3>
+                    <button wire:click="$set('showFormModal', false)"
+                        class="text-primary-700 hover:bg-primary-600 hover:text-primary-100 rounded-lg text-sm w-8 h-8 inline-flex items-center justify-center">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
                 </div>
 
-                <button wire:click.prevent="addBahan" class="text-sm text-blue-600 dark:text-blue-400 mt-2">
-                    + Tambah Bahan
-                </button>
-            </div>
+                <div class="p-6 space-y-4 grid grid-cols-12 gap-4">
+                    <div class="col-span-6">
+                        <div>
+                            <label class="block text-sm font-medium text-primary-700">Nama Menu</label>
+                            <input type="text" wire:model.defer="form.nama"
+                                class="w-full mt-1 rounded-md border-primary-300 shadow-sm focus:ring-primary-500 focus:border-primary-500"
+                                placeholder="Masukkan nama menu">
+                        </div>
 
-            <div class="mt-4 flex justify-end gap-2">
-                <button wire:click="$set('showFormModal', false)"
-                    class="px-4 py-2 bg-gray-300 dark:bg-zinc-600 rounded">Batal</button>
-                <button wire:click="save" class="px-4 py-2 bg-blue-600 text-white rounded">Simpan</button>
+                        <div>
+                            <label class="block text-sm font-medium text-primary-700">Tipe</label>
+                            <input type="text" wire:model.defer="form.tipe"
+                                class="w-full mt-1 rounded-md border-primary-300 shadow-sm focus:ring-primary-500 focus:border-primary-500"
+                                placeholder="Masukkan tipe">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-primary-700">Harga</label>
+                            <input type="number" wire:model.defer="form.harga"
+                                class="w-full mt-1 rounded-md border-primary-300 shadow-sm focus:ring-primary-500 focus:border-primary-500"
+                                placeholder="Masukkan harga">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-primary-700">Deskripsi</label>
+                            <textarea wire:model.defer="form.deskripsi" rows="3"
+                                class="w-full mt-1 rounded-md border-primary-300 shadow-sm focus:ring-primary-500 focus:border-primary-500"
+                                placeholder="Deskripsi menu..."></textarea>
+                        </div>
+                    </div>
+                    <div class="col-span-6">
+                        <div class="col-span-2">
+                            <label class="block text-sm font-medium text-primary-700">Bahan</label>
+                            <div class="max-h-64 overflow-y-auto space-y-2">
+                                @foreach ($form['bahanList'] as $index => $bahan)
+                                <div class="flex items-center gap-2">
+                                    <select wire:model.defer="form.bahanList.{{ $index }}.bahan_id"
+                                        class="w-1/2 rounded-md border-primary-300 focus:ring-primary-500 focus:border-primary-500">
+                                        <option value="">-- Pilih bahan --</option>
+                                        @foreach($allBahans as $b)
+                                        <option value="{{ $b->id }}">{{ $b->nama }} ({{ $b->satuanKecil->nama ?? '' }})
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                    <input type="number" wire:model.defer="form.bahanList.{{ $index }}.jumlah"
+                                        class="w-1/3 rounded-md border-primary-300 focus:ring-primary-500 focus:border-primary-500"
+                                        placeholder="Jumlah">
+                                    <button wire:click.prevent="removeBahan({{ $index }})"
+                                        class="text-red-500">🗑️</button>
+                                </div>
+                                @endforeach
+                            </div>
+                            <button wire:click.prevent="addBahan"
+                                class="text-sm text-primary-600 dark:text-primary-400 mt-2">+
+                                Tambah Bahan</button>
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+                <div class="flex justify-end p-6 space-x-2 border-t">
+                    <button wire:click="$set('showFormModal', false)"
+                        class="text-primary-700 bg-white border border-primary-300 font-medium rounded-lg text-sm px-4 py-2 hover:bg-primary-600 hover:text-white">
+                        Batal
+                    </button>
+                    <button wire:click="save"
+                        class="text-white bg-primary-600 hover:bg-primary-700 font-medium rounded-lg text-sm px-4 py-2">
+                        Simpan
+                    </button>
+                </div>
             </div>
         </div>
     </div>
     @endif
-    @if($showDeleteConfirm)
-    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-md dark:bg-black/70">
-        <div class="bg-white dark:bg-zinc-800 text-black dark:text-white p-6 rounded shadow-md w-full max-w-md">
-            <h2 class="text-lg font-semibold mb-4">Hapus Menu</h2>
-            <p>Apakah kamu yakin ingin menghapus menu ini? Tindakan ini tidak dapat dibatalkan.</p>
-            <div class="mt-6 flex justify-end gap-3">
-                <button wire:click="$set('showDeleteConfirm', false)"
-                    class="px-4 py-2 bg-gray-300 dark:bg-zinc-600 rounded">Batal</button>
-                <button wire:click="delete" class="px-4 py-2 bg-red-600 text-white rounded">Hapus</button>
+
+    {{-- Modal Detail (lihat) --}}
+    @if($showModal && $selectedMenu)
+    <div class="fixed inset-0 z-50 flex justify-center items-center bg-black/50 backdrop-blur-md">
+        <div class="relative w-full max-w-lg">
+            <div class="bg-gradient-to-bl from-primary-50 to-primary-100 rounded-lg shadow">
+                <div
+                    class="flex items-start justify-between p-4 bg-gradient-to-br from-primary-200 to-primary-300 border-b rounded-t">
+                    <h3 class="text-xl font-semibold text-primary-900">Detail Menu</h3>
+                    <button wire:click="$set('showModal', false)"
+                        class="text-primary-700 hover:bg-primary-600 hover:text-primary-100 rounded-lg text-sm w-8 h-8 inline-flex items-center justify-center">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="p-6 space-y-2 text-primary-900">
+                    <p><strong>Nama:</strong> {{ $selectedMenu->nama }}</p>
+                    <p><strong>Tipe:</strong> {{ $selectedMenu->tipe }}</p>
+                    <p><strong>Harga:</strong> Rp {{ number_format($selectedMenu->harga, 0, ',', '.') }}</p>
+                    <p><strong>Deskripsi:</strong> {{ $selectedMenu->deskripsi }}</p>
+                    <p><strong>Bahan:</strong></p>
+                    <ul class="list-disc list-inside">
+                        @foreach ($selectedMenu->listMenus as $item)
+                        <li>{{ $item->bahan->nama }} - {{ $item->jumlah }} {{ $item->bahan->satuanKecil->nama ?? '-' }}
+                        </li>
+                        @endforeach
+                    </ul>
+                </div>
+                <div class="flex justify-end p-4 border-t">
+                    <button wire:click="$set('showModal', false)"
+                        class="text-primary-700 bg-white border border-primary-300 font-medium rounded-lg text-sm px-4 py-2 hover:bg-primary-600 hover:text-white">
+                        Tutup
+                    </button>
+                </div>
             </div>
         </div>
     </div>
     @endif
+
+    {{-- Confirm Delete (pakai SweetAlert) --}}
+    @pushOnce('scripts')
+    <script>
+        function confirmDelete(id) {
+            Swal.fire({
+                title: 'Yakin ingin menghapus?',
+                text: "Menu akan dihapus permanen.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    @this.call('delete', id);
+                }
+            });
+        }
+
+        window.addEventListener('toast', event => {
+            
+            const { type = 'success', message = '' } = event.detail[0][0];
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: type,
+                title: message,
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+            });
+        });
+    </script>
+    @endPushOnce
 </div>

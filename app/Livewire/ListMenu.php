@@ -3,10 +3,11 @@
 namespace App\Livewire;
 
 use App\Models\Menu;
+use App\Models\Bahan;
 use Livewire\Component;
-use Illuminate\Support\Str;
 use Livewire\WithPagination;
 use Livewire\WithoutUrlPagination;
+use Illuminate\Support\Str;
 
 class ListMenu extends Component
 {
@@ -14,55 +15,46 @@ class ListMenu extends Component
 
     public $selectedMenu;
     public $showModal = false;
+    public $showFormModal = false;
     public $search = '';
     public $perPage = 5;
     public $isEditing = false;
+    public $deleteId = null;
+
     public $form = [
         'id' => null,
         'nama' => '',
         'tipe' => '',
         'harga' => '',
         'deskripsi' => '',
-        'bahanList' => [], // array of ['bahan_id' => ..., 'jumlah' => ...]
+        'bahanList' => [],
     ];
 
     public $allBahans;
-    public $showFormModal = false;
 
-    public $deleteId = null;
-    public $showDeleteConfirm = false;
-
-    // protected $queryString = ['search', 'perPage'];
     protected $paginationTheme = 'tailwind';
+
+    public function mount()
+    {
+        $this->allBahans = Bahan::with('satuanKecil')->get();
+    }
+
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
     public function openCreateForm()
     {
         $this->resetForm();
-        $this->allBahans = \App\Models\Bahan::with('satuanKecil')->get();
-        $this->showFormModal = true;
         $this->isEditing = false;
-    }
-
-    public function confirmDelete($id)
-    {
-        $this->deleteId = $id;
-        $this->showDeleteConfirm = true;
-    }
-
-    public function delete()
-    {
-        $menu = Menu::findOrFail($this->deleteId);
-        $menu->listMenus()->delete(); // hapus relasi bahan
-        $menu->delete(); // hapus menu utama
-
-        $this->showDeleteConfirm = false;
-        $this->deleteId = null;
-
-        session()->flash('message', 'Menu berhasil dihapus.');
+        $this->showFormModal = true;
     }
 
     public function openEditForm($menuId)
     {
         $menu = Menu::with('listMenus')->findOrFail($menuId);
+
         $this->form = [
             'id' => $menu->id,
             'nama' => $menu->nama,
@@ -75,34 +67,27 @@ class ListMenu extends Component
             ])->toArray()
         ];
 
-        $this->allBahans = \App\Models\Bahan::with('satuanKecil')->get();
-        $this->showFormModal = true;
         $this->isEditing = true;
-    }
-
-
-    public function resetForm()
-    {
-        $this->form = [
-            'id' => null,
-            'nama' => '',
-            'tipe' => '',
-            'harga' => '',
-            'deskripsi' => '',
-            'bahanList' => [],
-        ];
+        $this->showFormModal = true;
     }
 
     public function showDetail($menuId)
     {
-        $this->selectedMenu = Menu::with(['listMenus.bahan.satuanKecil'])->find($menuId);
+        $this->selectedMenu = Menu::with(['listMenus.bahan.satuanKecil'])->findOrFail($menuId);
         $this->showModal = true;
     }
 
-    public function updatingSearch()
+    public function delete($id)
     {
-        $this->resetPage(); // reset ke halaman 1 saat filter berubah
+        $menu = Menu::findOrFail($id);
+        $menu->listMenus()->delete();
+        $menu->delete();
+
+        $this->dispatch('toast', [
+            ['type' => 'success', 'message' => 'Menu berhasil dihapus.']
+        ]);
     }
+
     public function save()
     {
         $this->validate([
@@ -125,7 +110,6 @@ class ListMenu extends Component
             ]
         );
 
-        // Hapus dan insert ulang listMenus
         $menu->listMenus()->delete();
         foreach ($this->form['bahanList'] as $bahan) {
             $menu->listMenus()->create([
@@ -134,10 +118,14 @@ class ListMenu extends Component
             ]);
         }
 
+        $this->dispatch('toast', [
+            ['type' => 'success', 'message' => 'Menu berhasil disimpan.']
+        ]);
+
         $this->showFormModal = false;
         $this->resetForm();
-        $this->render();
     }
+
     public function addBahan()
     {
         $this->form['bahanList'][] = ['bahan_id' => '', 'jumlah' => 1];
@@ -146,7 +134,19 @@ class ListMenu extends Component
     public function removeBahan($index)
     {
         unset($this->form['bahanList'][$index]);
-        $this->form['bahanList'] = array_values($this->form['bahanList']); // reindex
+        $this->form['bahanList'] = array_values($this->form['bahanList']);
+    }
+
+    public function resetForm()
+    {
+        $this->form = [
+            'id' => null,
+            'nama' => '',
+            'tipe' => '',
+            'harga' => '',
+            'deskripsi' => '',
+            'bahanList' => [],
+        ];
     }
 
     public function render()

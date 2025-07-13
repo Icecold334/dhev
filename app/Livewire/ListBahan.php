@@ -48,9 +48,7 @@ class ListBahan extends Component
         $konversi = $bahan->konversi;
 
         $stokSekarangKecil = $bahan->getTotalStok()['kecil'];
-        $stokInputBesar = (float) $this->stokOpnameInput;
-        $stokInputKecil = round($stokInputBesar * $konversi);
-
+        $stokInputKecil = round($this->stokOpnameInput * $konversi);
         $selisih = $stokInputKecil - $stokSekarangKecil;
 
         if ($selisih !== 0) {
@@ -59,7 +57,7 @@ class ListBahan extends Component
                 'kode' => 'ADJ-' . now()->format('YmdHis'),
                 'jumlah' => $selisih,
                 'harga' => 0,
-                'keterangan' => 'Penyesuaian stok opname (' . $stokInputBesar . ' ' . $bahan->satuanBesar->nama . ')',
+                'keterangan' => 'Penyesuaian stok opname (' . $this->stokOpnameInput . ' ' . $bahan->satuanBesar->nama . ')',
             ]);
         }
 
@@ -67,7 +65,9 @@ class ListBahan extends Component
         $this->selectedBahan = null;
         $this->stokOpnameInput = null;
 
-        session()->flash('message', 'Stok berhasil disesuaikan.');
+        $this->dispatch('toast', [
+            ['type' => 'success', 'message' => 'Stok berhasil disesuaikan.']
+        ]);
     }
 
 
@@ -128,7 +128,10 @@ class ListBahan extends Component
 
         $this->showFormModal = false;
         $this->resetForm();
-        session()->flash('message', $this->isEditing ? 'Bahan berhasil diperbarui.' : 'Bahan berhasil ditambahkan.');
+
+        $this->dispatch('toast', [
+            ['type' => 'success', 'message' => $this->isEditing ? 'Bahan berhasil diperbarui.' : 'Bahan berhasil ditambahkan.']
+        ]);
     }
 
 
@@ -138,14 +141,13 @@ class ListBahan extends Component
         $this->showDeleteConfirm = true;
     }
 
-    public function delete()
+    public function delete($id)
     {
-        $bahan = Bahan::findOrFail($this->deleteId);
-        $bahan->delete();
+        Bahan::findOrFail($id)->delete();
 
-        $this->showDeleteConfirm = false;
-        $this->deleteId = null;
-        session()->flash('message', 'Bahan berhasil dihapus.');
+        $this->dispatch('toast', [
+            ['type' => 'success', 'message' => 'Bahan berhasil dihapus.']
+        ]);
     }
 
     public function render()
