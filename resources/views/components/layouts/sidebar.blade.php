@@ -21,6 +21,8 @@
         title="Laporan Penjualan" icon="fa-solid fa-arrow-trend-up" />
       <x-sideitem :active="request()->is('laporan/beli')" href="{{ route('laporan.index',['type'=>'beli']) }}"
         title="Laporan Pembelian" icon="fa-solid fa-arrow-trend-down" />
+      <x-sideitem :active="request()->is('logout.get')" href="{{ route('logout.get') }}" title="Keluar"
+        icon="fa-solid fa-right-from-bracket" />
     </ul>
   </div>
 </aside>
