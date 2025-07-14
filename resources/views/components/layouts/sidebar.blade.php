@@ -2,7 +2,7 @@
   class="fixed top-0 left-0 z-40 w-64 h-screen bg-gradient-to-b from-primary-600 to-primary-800 shadow-2xl transition-transform -translate-x-full lg:translate-x-0">
   <div class="h-full  overflow-y-auto">
     {{-- <h2 class="text-2xl font-bold mb-6 text-white text-center px-4 py-3">{{ env('APP_NAME') }}</h2> --}}
-    <div class="flex flex-col items-center justify-center bg-gradient-to-t rounded-lg shadow-2xl px-4 py-3">
+    <div class="flex flex-col items-center justify-center  rounded-lg shadow-2xl px-4 py-3">
       <img src="{{ asset('img/logo.png') }}" alt="Logo" class="w-24 h-24 mb-2 ">
       <h2 class="text-white text-xl font-bold text-center">{{ env('APP_NAME') }}</h2>
     </div>

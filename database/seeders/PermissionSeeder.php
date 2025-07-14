@@ -15,7 +15,7 @@ class PermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        $entities = ['menu', 'bahan', 'penjualan', 'pembelian', 'laporan_jual', 'laporan_beli'];
+        $entities = ['dashboard', 'menu', 'bahan', 'penjualan', 'pembelian', 'laporan_jual', 'laporan_beli',];
         $actions = ['create', 'read', 'view', 'update', 'delete'];
 
         foreach ($entities as $entity) {

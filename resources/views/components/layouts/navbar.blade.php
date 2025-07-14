@@ -27,9 +27,9 @@
         <ul class="py-2" aria-labelledby="user-menu-button">
           <li>
             <a href="{{ route('settings.profile') }}"
-              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Pengaturan</a>
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-200 transition duration-200 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Pengaturan</a>
             <a href="/logout"
-              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Keluar</a>
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-200 transition duration-200 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Keluar</a>
           </li>
         </ul>
       </div>
