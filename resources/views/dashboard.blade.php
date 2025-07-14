@@ -2,6 +2,7 @@
     <div class="flex flex-col gap-6">
         {{-- Stats Card Grid --}}
         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+            @role('admin')
             {{-- Pendapatan --}}
             <div
                 class="rounded-2xl bg-gradient-to-bl from-primary-50 to-primary-100 p-4 shadow border border-zinc-200 ">
@@ -13,10 +14,11 @@
                         class="absolute left-0 top-0 h-full w-full"></canvas>
                 </div>
             </div>
+            @endrole
 
             {{-- Transaksi --}}
             <div
-                class="rounded-2xl bg-gradient-to-bl from-primary-50 to-primary-100 p-4 shadow border border-zinc-200 ">
+                class="rounded-2xl bg-gradient-to-bl @role('kasir') col-span-1 @endrole from-primary-50 to-primary-100 p-4 shadow border border-zinc-200 ">
                 <p class="text-sm text-black">Jumlah Transaksi Hari Ini</p>
                 <h3 class="mt-1 text-2xl font-semibold text-black">{{ $totalTransaksi }} Transaksi</h3>
                 <div class="relative h-45 max-h-45">
@@ -27,7 +29,7 @@
 
             {{-- Menu Terfavorit --}}
             <div
-                class="rounded-2xl bg-gradient-to-bl from-primary-50 to-primary-100 p-4 shadow border border-zinc-200 ">
+                class="@role('kasir') col-span-2 @endrole rounded-2xl bg-gradient-to-bl from-primary-50 to-primary-100 p-4 shadow border border-zinc-200 ">
                 <p class="text-sm text-black">Menu Terfavorit</p>
                 <h3 class="mt-1 text-2xl font-semibold text-black">{{ $menuTerfavorit }}</h3>
                 <div class="relative h-45 max-h-45">
@@ -37,6 +39,7 @@
             </div>
         </div>
 
+        @role('admin')
         {{-- Grafik Pendapatan 14 Hari --}}
         <div
             class="relative w-full flex-1 overflow-hidden rounded-xl border border-zinc-200 bg-gradient-to-bl from-primary-50 to-primary-100 p-6 ">
@@ -47,11 +50,13 @@
                 <canvas id="weeks" data-pendapatan='@json($dataPendapatan14Hari)' class="w-full h-full"></canvas>
             </div>
         </div>
+        @endrole
     </div>
 
     @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        @role('admin')
         // Grafik Pendapatan 14 Hari
         var weeksEl = document.getElementById('weeks');
         var pendapatanData = JSON.parse(weeksEl.dataset.pendapatan);
@@ -82,9 +87,10 @@
                 }
             }
         });
-
+        @endrole
+        @role('admin')
         // Mini Chart Pendapatan 7 Hari
-var pendapatanCanvas = document.getElementById('pendapatan');
+        var pendapatanCanvas = document.getElementById('pendapatan');
         var pendapatanHariIni = JSON.parse(pendapatanCanvas.dataset.values);
         new Chart(pendapatanCanvas.getContext('2d'), {
         type: 'line',
@@ -113,7 +119,7 @@ var pendapatanCanvas = document.getElementById('pendapatan');
         }
         }
         });
-
+@endrole
         // Mini Chart Transaksi 7 Hari
         var transaksiCanvas = document.getElementById('transaksi');
         var transaksi7 = JSON.parse(transaksiCanvas.dataset.values);

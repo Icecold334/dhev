@@ -2,11 +2,14 @@
 
 namespace App\Livewire\Settings;
 
+use Livewire\Component;
+use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password as PasswordRule;
 use Illuminate\Validation\ValidationException;
-use Livewire\Component;
+use Illuminate\Validation\Rules\Password as PasswordRule;
+
+#[Layout('components.layouts.body')]
 
 class Password extends Component
 {

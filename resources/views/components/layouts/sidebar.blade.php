@@ -9,18 +9,37 @@
     <ul class="space-y-2 px-4 py-6">
       <x-sideitem :active="request()->routeIs('dashboard')" href="{{ route('dashboard') }}" title="Dashboard"
         icon="fa-solid fa-gauge-high" />
+
+      @can('read menu')
       <x-sideitem :active="request()->routeIs('menu.index')" href="{{ route('menu.index') }}" title="Menu"
         icon="fa-solid fa-clipboard-list" />
+      @endcan
+
+      @can('read bahan')
       <x-sideitem :active="request()->routeIs('bahan.index')" href="{{ route('bahan.index') }}" title="Bahan"
         icon="fa-solid fa-box-archive" />
+      @endcan
+
+      @can('read penjualan')
       <x-sideitem :active="request()->routeIs('jual.index')" href="{{ route('jual.index') }}" title="Penjualan"
         icon="fa-solid fa-gauge-high" />
+      @endcan
+
+      @can('read pembelian')
       <x-sideitem :active="request()->routeIs('beli.index')" href="{{ route('beli.index') }}" title="Pembelian"
         icon="fa-solid fa-cart-shopping" />
+      @endcan
+
+      @can('read laporan_jual')
       <x-sideitem :active="request()->is('laporan/jual')" href="{{ route('laporan.index',['type'=>'jual']) }}"
         title="Laporan Penjualan" icon="fa-solid fa-arrow-trend-up" />
+      @endcan
+
+      @can('read laporan_beli')
       <x-sideitem :active="request()->is('laporan/beli')" href="{{ route('laporan.index',['type'=>'beli']) }}"
         title="Laporan Pembelian" icon="fa-solid fa-arrow-trend-down" />
+      @endcan
+
       <x-sideitem :active="request()->is('logout.get')" href="{{ route('logout.get') }}" title="Keluar"
         icon="fa-solid fa-right-from-bracket" />
     </ul>

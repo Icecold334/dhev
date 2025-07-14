@@ -4,10 +4,12 @@
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-4">
                 <div class="text-4xl font-semibold text-primary-700">Daftar Menu</div>
+                @can('create menu')
                 <button wire:click="openCreateForm" type="button"
                     class="text-primary-100 hover:text-primary-50 bg-primary-700 hover:bg-primary-800 transition duration-200 font-medium rounded-lg text-sm px-3 py-2">
                     <i class="fa-solid fa-plus"></i>
                 </button>
+                @endcan
             </div>
         </div>
         <div class="flex items-center gap-6 justify-self-end mt-4 md:mt-0">
@@ -37,7 +39,7 @@
                     <th class="px-6 py-3 text-center">#</th>
                     <th class="px-6 py-3 text-center">Nama</th>
                     <th class="px-6 py-3 text-center">Harga</th>
-                    <th class="px-6 py-3 text-center">Aksi</th>
+                    <th class="px-6 py-3 text-center"></th>
                 </tr>
             </thead>
             <tbody>
@@ -48,18 +50,26 @@
                     <td class="px-6 py-4 text-center">{{ $menu->nama }}</td>
                     <td class="px-6 py-4 text-center">Rp {{ number_format($menu->harga, 0, ',', '.') }}</td>
                     <td class="px-6 py-4 text-center flex justify-center gap-2">
+                        @can('view menu')
                         <button wire:click="showDetail({{ $menu->id }})"
                             class="text-white bg-info-700 hover:bg-info-800 font-medium rounded-md text-xs px-2 py-1">
                             <i class="fa-solid fa-eye"></i>
                         </button>
+                        @endcan
+
+                        @can('update menu')
                         <button wire:click="openEditForm({{ $menu->id }})"
                             class="text-white bg-warning-500 hover:bg-warning-600 font-medium rounded-md text-xs px-2 py-1">
                             <i class="fa-solid fa-pencil"></i>
                         </button>
+                        @endcan
+
+                        @can('delete menu')
                         <button onclick="confirmDelete({{ $menu->id }})"
                             class="text-white bg-danger-700 hover:bg-danger-800 font-medium rounded-md text-xs px-2 py-1">
                             <i class="fa-solid fa-trash-can"></i>
                         </button>
+                        @endcan
                     </td>
                 </tr>
                 @empty

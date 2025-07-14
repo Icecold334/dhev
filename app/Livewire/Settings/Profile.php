@@ -3,11 +3,13 @@
 namespace App\Livewire\Settings;
 
 use App\Models\User;
+use Livewire\Component;
+use Illuminate\Validation\Rule;
+use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Validation\Rule;
-use Livewire\Component;
 
+#[Layout('components.layouts.body')]
 class Profile extends Component
 {
     public string $name = '';

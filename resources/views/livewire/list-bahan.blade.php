@@ -4,10 +4,12 @@
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-4">
                 <div class="text-4xl font-semibold text-primary-700">Daftar Bahan</div>
+                @can('create bahan')
                 <button wire:click="openCreateForm" type="button"
                     class="text-primary-100 hover:text-primary-50 bg-primary-700 hover:bg-primary-800 transition duration-200 font-medium rounded-lg text-sm px-3 py-2">
                     <i class="fa-solid fa-plus"></i>
                 </button>
+                @endcan
             </div>
         </div>
         <div class="flex items-center gap-6 justify-self-end mt-4 md:mt-0">
@@ -37,7 +39,7 @@
                     <th class="px-6 py-3 text-center">#</th>
                     <th class="px-6 py-3 text-center">Nama Bahan</th>
                     <th class="px-6 py-3 text-center">Stok</th>
-                    <th class="px-6 py-3 text-center">Aksi</th>
+                    <th class="px-6 py-3 text-center"></th>
                 </tr>
             </thead>
             <tbody>
@@ -51,18 +53,26 @@
                         {{ $bahan->total_stok['kecil'] }} {{ $bahan->satuanKecil->nama ?? '-' }}
                     </td>
                     <td class="px-6 py-4 flex justify-center gap-2">
+                        @can('update bahan')
                         <button wire:click="openEditForm({{ $bahan->id }})"
                             class="text-white bg-warning-500 hover:bg-warning-600 font-medium rounded-md text-xs px-2 py-1">
                             <i class="fa-solid fa-pencil"></i>
                         </button>
+                        @endcan
+
+                        @can('delete bahan')
                         <button onclick="confirmDelete({{ $bahan->id }})"
                             class="text-white bg-danger-700 hover:bg-danger-800 font-medium rounded-md text-xs px-2 py-1">
                             <i class="fa-solid fa-trash-can"></i>
                         </button>
+                        @endcan
+
+                        @can('update bahan') {{-- asumsikan opname adalah update stok --}}
                         <button wire:click="openOpname({{ $bahan->id }})"
                             class="text-white bg-amber-600 hover:bg-amber-700 font-medium rounded-md text-xs px-2 py-1">
                             <i class="fa-solid fa-clipboard-check"></i>
                         </button>
+                        @endcan
                     </td>
                 </tr>
                 @empty

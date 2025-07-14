@@ -17,20 +17,24 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        User::factory()->create([
+            'name' => 'Admin',
+            'email' => 'admin@email.com',
+        ]);
+        User::factory()->create([
+            'name' => 'Kasir',
+            'email' => 'kasir@email.com',
+        ]);
         $this->call([
             SatuanSeeder::class,
             BahanSeeder::class,
-            MenuSeeder::class
+            MenuSeeder::class,
+            PermissionSeeder::class
         ]);
         foreach (Menu::all() as $key => $value) {
             ListMenu::factory(fake()->numberBetween(3, 7))->fillMenu($value)->create();
         }
         Transaksi::factory(10)->create();
         LogStok::factory(1000)->create();
-
-        User::factory()->create([
-            'name' => 'User',
-            'email' => 'user@user.com',
-        ]);
     }
 }
