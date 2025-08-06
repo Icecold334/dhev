@@ -25,7 +25,9 @@ class ListBahan extends Component
         'konversi' => '',
         'besar_id' => '',
         'kecil_id' => '',
+        'minimal_stok' => 0,
     ];
+
     public $showOpnameModal = false;
     public $selectedBahan;
     public $stokOpnameInput;
@@ -81,8 +83,13 @@ class ListBahan extends Component
         $this->form = [
             'id' => null,
             'nama' => '',
+            'konversi' => '',
+            'besar_id' => '',
+            'kecil_id' => '',
+            'minimal_stok' => 0,
         ];
     }
+
 
     public function openCreateForm()
     {
@@ -100,6 +107,7 @@ class ListBahan extends Component
             'nama' => $bahan->nama,
             'konversi' => $bahan->konversi,
             'besar_id' => $bahan->besar_id,
+            'minimal_stok' => $bahan->minimal_stok,
             'kecil_id' => $bahan->kecil_id,
         ];
         $this->allSatuan = \App\Models\Satuan::all();
@@ -114,6 +122,7 @@ class ListBahan extends Component
             'form.konversi' => 'required|integer|min:1',
             'form.besar_id' => 'required|exists:satuan,id',
             'form.kecil_id' => 'required|exists:satuan,id',
+            'form.minimal_stok' => 'required|integer|min:0',
         ]);
 
         \App\Models\Bahan::updateOrCreate(
@@ -123,6 +132,7 @@ class ListBahan extends Component
                 'konversi' => $this->form['konversi'],
                 'besar_id' => $this->form['besar_id'],
                 'kecil_id' => $this->form['kecil_id'],
+                'minimal_stok' => $this->form['minimal_stok'],
             ]
         );
 

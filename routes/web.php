@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Bahan;
 use App\Models\Transaksi;
 use App\Livewire\Settings\Profile;
 use Illuminate\Support\Facades\DB;
@@ -35,6 +36,23 @@ Route::get('dashboard', function () {
         ->first();
 
     $namaMenuTerfavorit = $menuTerfavorit?->menu->nama ?? '-';
+
+    // === Menu Terjual Hari Ini ===
+    $menuHariIni = Transaksi::whereDate('transaksis.created_at', $today)
+        ->select('menus.nama', DB::raw('SUM(transaksis.jumlah) as total'))
+        ->join('menus', 'menus.id', '=', 'transaksis.menu_id')
+        ->groupBy('menus.nama')
+        ->orderByDesc('total')
+        ->get()->take(4);
+
+    $allStokMenipis = Bahan::with(['satuanBesar'])
+        ->get()
+        ->filter(fn($bahan) => $bahan->getTotalStok()['besar'] <= $bahan->minimal_stok)
+        ->values();
+
+    $bahanStokMenipis = $allStokMenipis->take(3); // ambil hanya 3 pertama
+    $jumlahStokMenipis = $allStokMenipis->count();
+
 
     // === Pendapatan 14 Hari Terakhir ===
     $tanggal14 = collect(range(0, 13))
@@ -99,6 +117,11 @@ Route::get('dashboard', function () {
         'dataTransaksi7Hari' => $dataTransaksi7Hari,
         'menuLabels' => $menuLabels,
         'menuValues' => $menuValues,
+        'menuHariIni' => $menuHariIni,
+        'bahanStokMenipis' => $bahanStokMenipis,
+        'jumlahStokMenipis' => $jumlahStokMenipis,
+
+
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 

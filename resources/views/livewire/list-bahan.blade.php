@@ -39,6 +39,7 @@
                     <th class="px-6 py-3 text-center">#</th>
                     <th class="px-6 py-3 text-center">Nama Bahan</th>
                     <th class="px-6 py-3 text-center">Stok</th>
+                    <th class="px-6 py-3 text-center">Minimal Stok (Dalam Satuan Besar)</th>
                     <th class="px-6 py-3 text-center"></th>
                 </tr>
             </thead>
@@ -47,10 +48,22 @@
                 <tr class="odd:bg-white even:bg-primary-100 text-primary-900 border-b border-primary-200">
                     <td class="px-6 py-4 text-center">{{ ($bahans->currentPage() - 1) * $bahans->perPage() + $index + 1
                         }}</td>
-                    <td class="px-6 py-4 text-center">{{ $bahan->nama }}</td>
+                    <td class="px-6 py-4 text-center">
+                        {{ $bahan->nama }}
+
+                        @if($bahan->total_stok['besar'] <= $bahan->minimal_stok)
+                            <span
+                                class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800">
+                                Stok Rendah
+                            </span>
+                            @endif
+                    </td>
                     <td class="px-6 py-4 text-center">
                         {{ $bahan->total_stok['besar'] }} {{ $bahan->satuanBesar->nama ?? '-' }} -
                         {{ $bahan->total_stok['kecil'] }} {{ $bahan->satuanKecil->nama ?? '-' }}
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        {{ $bahan->minimal_stok }} {{ $bahan->satuanBesar->nama ?? '-' }}
                     </td>
                     <td class="px-6 py-4 flex justify-center gap-2">
                         @can('update bahan')
@@ -77,7 +90,7 @@
                 </tr>
                 @empty
                 <tr class="odd:bg-white even:bg-primary-100 text-primary-900 border-b border-primary-200">
-                    <td colspan="4" class="text-center py-4">Tidak ada bahan ditemukan.</td>
+                    <td colspan="5" class="text-center py-4">Tidak ada bahan ditemukan.</td>
                 </tr>
                 @endforelse
             </tbody>
@@ -102,6 +115,9 @@
                     class="w-full rounded-md border-primary-300 shadow-sm focus:ring-primary-500 focus:border-primary-500">
 
                 <input type="number" wire:model.defer="form.konversi" placeholder="Jumlah konversi"
+                    class="w-full rounded-md border-primary-300 shadow-sm focus:ring-primary-500 focus:border-primary-500">
+
+                <input type="number" wire:model.defer="form.minimal_stok" placeholder="Minimal stok (satuan besar)"
                     class="w-full rounded-md border-primary-300 shadow-sm focus:ring-primary-500 focus:border-primary-500">
 
                 <select wire:model.defer="form.besar_id"

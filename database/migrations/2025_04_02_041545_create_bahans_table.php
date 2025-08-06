@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->integer('konversi');
+            $table->integer('minimal_stok')->default(0); // stok minimal pada satuan besar
             $table->foreignId('besar_id')->constrained('satuan')->onDelete('cascade');
             $table->foreignId('kecil_id')->constrained('satuan')->onDelete('cascade');
             $table->timestamps();

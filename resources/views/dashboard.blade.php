@@ -27,30 +27,139 @@
                 </div>
             </div>
 
-            {{-- Menu Terfavorit --}}
+            {{-- Menu Terjual Hari Ini --}}
             <div
-                class="@role('kasir') col-span-2 @endrole rounded-2xl bg-gradient-to-bl from-primary-50 to-primary-100 p-4 shadow border border-zinc-200 ">
-                <p class="text-sm text-black">Menu Terfavorit</p>
-                <h3 class="mt-1 text-2xl font-semibold text-black">{{ $menuTerfavorit }}</h3>
-                <div class="relative h-45 max-h-45">
-                    <canvas id="menu" data-labels='@json($menuLabels)' data-values='@json($menuValues)'
-                        class="absolute left-0 top-0 h-full w-full"></canvas>
+                class=" rounded-2xl bg-gradient-to-bl from-primary-50 to-primary-100 p-4 shadow border border-zinc-200">
+                <p class="text-sm text-black">Menu Terjual Hari Ini</p>
+                <div class="mt-2 overflow-x-auto">
+                    <table class="min-w-full text-sm text-left text-primary-900">
+                        <thead class="text-xs uppercase text-primary-700 bg-primary-200">
+                            <tr>
+                                <th class="px-4 py-2">#</th>
+                                <th class="px-4 py-2">Nama Menu</th>
+                                <th class="px-4 py-2">Jumlah Terjual</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($menuHariIni as $index => $menu)
+                            <tr class="odd:bg-white even:bg-primary-100 border-b border-primary-200">
+                                <td class="px-4 py-2">{{ $index + 1 }}</td>
+                                <td class="px-4 py-2">{{ $menu->nama }}</td>
+                                <td class="px-4 py-2">{{ $menu->total }}</td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="3" class="px-4 py-2 text-center">Tidak ada data hari ini.</td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {{-- Bahan Stok Menipis --}}
+            <div class="rounded-2xl bg-gradient-to-bl from-primary-50 to-primary-100 p-4 shadow border border-zinc-200">
+                <h2 class="text-lg font-semibold text-black ">Bahan dengan Stok Menipis</h2>
+                <div class="mt-2 overflow-x-auto">
+                    <table class="min-w-full text-sm text-left text-primary-900">
+                        <thead class="text-xs uppercase text-primary-700 bg-primary-200">
+                            <tr>
+                                <th class="px-4 py-2">#</th>
+                                <th class="px-4 py-2">Nama Bahan</th>
+                                <th class="px-4 py-2">Stok Sekarang</th>
+                                <th class="px-4 py-2">Minimal Stok</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($bahanStokMenipis as $index => $bahan)
+                            <tr class="odd:bg-white even:bg-primary-100 border-b border-primary-200">
+                                <td class="px-4 py-2">{{ $index + 1 }}</td>
+                                <td class="px-4 py-2">{{ $bahan->nama }}</td>
+                                <td class="px-4 py-2">{{ $bahan->getTotalStok()['besar'] }} {{ $bahan->satuanBesar->nama
+                                    ?? '-' }}</td>
+                                <td class="px-4 py-2">{{ $bahan->minimal_stok }} {{ $bahan->satuanBesar->nama ?? '-' }}
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="4" class="px-4 py-2 text-center">Semua bahan dalam stok aman.</td>
+                            </tr>
+                            @endforelse
+
+                            @if($jumlahStokMenipis > 4)
+                            <tr class="odd:bg-white even:bg-primary-100 border-b border-primary-200">
+                                <td colspan="4" class="px-4 py-2 text-center">
+                                    <a href="{{ route('bahan.index') }}"
+                                        class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-full bg-primary-300 text-primary-800 hover:bg-primary-200 transition">
+                                        Dan {{ $jumlahStokMenipis - 3 }} bahan lainnya...
+                                    </a>
+                                </td>
+                            </tr>
+                            @endif
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
 
         @role('admin')
-        {{-- Grafik Pendapatan 14 Hari --}}
-        <div
-            class="relative w-full flex-1 overflow-hidden rounded-xl border border-zinc-200 bg-gradient-to-bl from-primary-50 to-primary-100 p-6 ">
-            <div class="flex items-center justify-between mb-4">
-                <h2 class="text-lg font-semibold text-black ">Grafik Pendapatan 14 Hari Terakhir</h2>
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+            {{-- Grafik Pendapatan 14 Hari --}}
+            <div
+                class="rounded-2xl col-span-2 bg-gradient-to-bl from-primary-50 to-primary-100 p-4 shadow border border-zinc-200 ">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-semibold text-black ">Grafik Pendapatan 14 Hari Terakhir</h2>
+                </div>
+                <div class="relative h-52 max-h-52">
+                    <canvas id="weeks" data-pendapatan='@json($dataPendapatan14Hari)' class="w-full h-full"></canvas>
+                </div>
             </div>
-            <div class="relative h-52 max-h-52">
-                <canvas id="weeks" data-pendapatan='@json($dataPendapatan14Hari)' class="w-full h-full"></canvas>
+            {{-- Bahan Stok Menipis --}}
+            <div class="rounded-2xl bg-gradient-to-bl from-primary-50 to-primary-100 p-4 shadow border border-zinc-200">
+                <h2 class="text-lg font-semibold text-black ">Bahan dengan Stok Menipis</h2>
+                <div class="mt-2 overflow-x-auto">
+                    <table class="min-w-full text-sm text-left text-primary-900">
+                        <thead class="text-xs uppercase text-primary-700 bg-primary-200">
+                            <tr>
+                                <th class="px-4 py-2">#</th>
+                                <th class="px-4 py-2">Nama Bahan</th>
+                                <th class="px-4 py-2">Stok Sekarang</th>
+                                <th class="px-4 py-2">Minimal Stok</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($bahanStokMenipis as $index => $bahan)
+                            <tr class="odd:bg-white even:bg-primary-100 border-b border-primary-200">
+                                <td class="px-4 py-2">{{ $index + 1 }}</td>
+                                <td class="px-4 py-2">{{ $bahan->nama }}</td>
+                                <td class="px-4 py-2">{{ $bahan->getTotalStok()['besar'] }} {{ $bahan->satuanBesar->nama
+                                    ?? '-' }}</td>
+                                <td class="px-4 py-2">{{ $bahan->minimal_stok }} {{ $bahan->satuanBesar->nama ?? '-' }}
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="4" class="px-4 py-2 text-center">Semua bahan dalam stok aman.</td>
+                            </tr>
+                            @endforelse
+
+                            @if($jumlahStokMenipis > 4)
+                            <tr class="odd:bg-white even:bg-primary-100 border-b border-primary-200">
+                                <td colspan="4" class="px-4 py-2 text-center">
+                                    <a href="{{ route('bahan.index') }}"
+                                        class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-full bg-primary-300 text-primary-800 hover:bg-primary-200 transition">
+                                        Dan {{ $jumlahStokMenipis - 3 }} bahan lainnya...
+                                    </a>
+                                </td>
+                            </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
         @endrole
+
+
     </div>
 
     @push('scripts')
