@@ -56,6 +56,7 @@
                     </table>
                 </div>
             </div>
+            @role('kasir')
             {{-- Bahan Stok Menipis --}}
             <div class="rounded-2xl bg-gradient-to-bl from-primary-50 to-primary-100 p-4 shadow border border-zinc-200">
                 <h2 class="text-lg font-semibold text-black ">Bahan dengan Stok Menipis</h2>
@@ -99,6 +100,7 @@
                     </table>
                 </div>
             </div>
+            @endrole
         </div>
 
         @role('admin')

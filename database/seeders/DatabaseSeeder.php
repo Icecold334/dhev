@@ -27,14 +27,14 @@ class DatabaseSeeder extends Seeder
         ]);
         $this->call([
             SatuanSeeder::class,
-            BahanSeeder::class,
-            MenuSeeder::class,
+            // BahanSeeder::class,
+            // MenuSeeder::class,
             PermissionSeeder::class
         ]);
-        foreach (Menu::all() as $key => $value) {
-            ListMenu::factory(fake()->numberBetween(3, 7))->fillMenu($value)->create();
-        }
-        Transaksi::factory(10)->create();
-        LogStok::factory(1000)->create();
+        // foreach (Menu::all() as $key => $value) {
+        //     ListMenu::factory(fake()->numberBetween(3, 7))->fillMenu($value)->create();
+        // }
+        // Transaksi::factory(10)->create();
+        // LogStok::factory(1000)->create();
     }
 }

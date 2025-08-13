@@ -21,22 +21,45 @@
 
                     <div
                         class="bg-gradient-to-bl from-primary-50 to-primary-100 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg shadow p-4">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-zinc-100 flex items-center gap-2">
-                            {{ $menu->nama }}
-                            @if($bahanKurang)
-                            <span
-                                class="text-xs font-medium bg-red-100 text-red-700 dark:bg-red-800 dark:text-red-200 px-2 py-0.5 rounded-full">
-                                Stok habis
-                            </span>
-                            @endif
-                        </h3>
+                        @php
+                        $bahanKurang = false;
+                        $maksPorsi = INF;
+                        foreach ($menu->listMenus as $item) {
+                        $stok = $item->bahan->getTotalStok()['kecil'];
 
-                        <div class="flex items-center justify-between mt-2">
-                            <span class="text-green-600 dark:text-green-400 font-semibold">
-                                Rp {{ number_format($menu->harga) }}
-                            </span>
-                            <flux:button wire:click="tambahMenu({{ $menu->id }})">Tambah</flux:button>
-                        </div>
+                        // Kurangi stok dengan yang sudah ada di cart
+                        $sudahDipesan = ($cart[$menu->id] ?? 0) * $item->jumlah;
+                        $sisaStok = $stok - $sudahDipesan;
+
+                        $porsi = floor(max($sisaStok, 0) / $item->jumlah);
+                        $maksPorsi = min($maksPorsi, $porsi);
+
+                        if ($sisaStok < $item->jumlah) {
+                            $bahanKurang = true;
+                            }
+                            }
+                            @endphp
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-zinc-100 flex items-center gap-2">
+                                {{ $menu->nama }}
+                                @if($bahanKurang)
+                                <span
+                                    class="text-xs font-medium bg-red-100 text-red-700 dark:bg-red-800 dark:text-red-200 px-2 py-0.5 rounded-full">
+                                    Stok habis
+                                </span>
+                                @else
+                                <span
+                                    class="text-xs font-medium bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-200 px-2 py-0.5 rounded-full">
+                                    Sisa {{ $maksPorsi }} porsi
+                                </span>
+                                @endif
+                            </h3>
+
+                            <div class="flex items-center justify-between mt-2">
+                                <span class="text-green-600 dark:text-green-400 font-semibold">
+                                    Rp {{ number_format($menu->harga) }}
+                                </span>
+                                <flux:button wire:click="tambahMenu({{ $menu->id }})">Tambah</flux:button>
+                            </div>
                     </div>
                     @empty
                     <div
